@@ -1,0 +1,117 @@
+.rootLayout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid red;
+  background-color: #f0f0f0;
+}
+
+.mainLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  border: 1px solid blue;
+  width: 80%;
+}
+
+.header {
+  width: 100%;
+  height: auto;
+  border: 1px solid green;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.footer {
+  width: 100%;
+  height: auto;
+  border: 1px solid yellow;
+}
+
+/* STUDENTS */
+/* Students Table */
+.students-table {
+  width: 100%;
+  border: 1px solid purple;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+th {
+  padding: 1rem;
+  background-color: #4caf50;
+}
+
+tr {
+  text-align: center;
+  padding: 1rem;
+}
+
+tr:nth-child(even) {
+  background-color: #d6d6d6;
+}
+
+td {
+  padding: 1rem;
+}
+
+.btn-action {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 0.25rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+}
+
+.btn-action:hover {
+  background-color: #45a049;
+}
+
+/* FORMS */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 450px;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
