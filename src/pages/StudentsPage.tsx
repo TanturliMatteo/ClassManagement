@@ -1,7 +1,7 @@
 import type { StudentWithClass } from "../types";
 
 import { useState } from "react";
-import { useStudents } from "../hooks/useStudents";
+import { useStudents } from "../hooks/useGetStudents";
 import StudentsTable from "../components/ui/StudentsTable";
 import FormEditStudent from "../components/ui/FormEditStudent";
 
@@ -14,7 +14,7 @@ export default function StudentsPage() {
   if (isError) return <div>Errore: {error.message}</div>;
 
   return (
-    <div>
+    <>
       <StudentsTable
         students={students}
         onEditClick={(student) => setSelectedStudent(student)}
@@ -25,6 +25,6 @@ export default function StudentsPage() {
           onClose={() => setSelectedStudent(null)}
         />
       )}
-    </div>
+    </>
   );
 }

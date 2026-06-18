@@ -1,4 +1,5 @@
 import type { StudentWithClass } from "../../types/index";
+import toDateITA from "../../utils/toDateITA";
 
 interface StudentTableProps {
   students: StudentWithClass[] | undefined;
@@ -10,7 +11,7 @@ const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
     return <div>Nessuno studente trovato.</div>;
 
   return (
-    <table className="students-table">
+    <table>
       <thead>
         <tr>
           <th>Name</th>
@@ -27,20 +28,10 @@ const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
             <td>{s.name}</td>
             <td>{s.email}</td>
             <td>{s.Classes?.name || "Nessuna classe"}</td>
+            <td>{toDateITA(s.enrollment_date)}</td>
+            <td>{toDateITA(s.end_date)}</td>
             <td>
-              {s.enrollment_date
-                ? new Date(s.enrollment_date).toLocaleDateString("it-IT")
-                : "Non definita"}
-            </td>
-            <td>
-              {s.end_date
-                ? new Date(s.end_date).toLocaleDateString("it-IT")
-                : "Non definita"}
-            </td>
-            <td>
-              <button onClick={() => onEditClick(s)} className="btn-action">
-                Edit
-              </button>
+              <button onClick={() => onEditClick(s)}>Edit</button>
             </td>
           </tr>
         ))}
