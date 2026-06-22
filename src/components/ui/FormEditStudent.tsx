@@ -1,35 +1,39 @@
 import type { StudentWithClass } from "../../types/index";
 import { useState } from "react";
 import { useUpdateStudent } from "../../hooks/useUpdateStudent";
+import { useGetClasses } from "../../hooks/useGetClasses";
 
 interface FormEditStudentProps {
-  student: StudentWithClass | null;
+  studentData: StudentWithClass | null;
   onClose: () => void;
 }
 
-const FormEditStudent = ({ student, onClose }: FormEditStudentProps) => {
-  const [name, setName] = useState(student?.name || "");
-  const [email, setEmail] = useState(student?.email || "");
-  const [className, setClassName] = useState(student?.Classes?.name || "");
+const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
+  const [name, setName] = useState(studentData?.name || "");
+  const [email, setEmail] = useState(studentData?.email || "");
+  const [classId, setClassId] = useState(studentData?.class_id || "");
   const [enrollmentDate, setEnrollmentDate] = useState(
-    student?.enrollment_date || "",
+    studentData?.enrollment_date || "",
   );
-  const [endDate, setEndDate] = useState(student?.end_date || "");
+  const [endDate, setEndDate] = useState(studentData?.end_date || "");
+  const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
 
   const { mutate, isPending } = useUpdateStudent();
 
-  if (!student) return <div className="modal-box">{"Student not found"}</div>;
+  if (!studentData)
+    return <div className="modal-box">{"Student not found"}</div>;
 
   const handleConfirm = () => {
     const dataToUpdate = {
       name: name,
+      class_id: classId,
       email: email,
       enrollment_date: enrollmentDate,
       end_date: endDate,
     };
 
     mutate(
-      { id: student.id, updates: dataToUpdate },
+      { id: studentData.id, updates: dataToUpdate },
       {
         onSuccess: () => {
           onClose();
@@ -47,7 +51,6 @@ const FormEditStudent = ({ student, onClose }: FormEditStudentProps) => {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="border p-2 rounded w-full"
             required
           />
         </label>
@@ -61,15 +64,26 @@ const FormEditStudent = ({ student, onClose }: FormEditStudentProps) => {
             required
           />
         </label>
+
         <label>
           Class:
-          <input
-            type="text"
-            value={className}
-            onChange={(e) => setClassName(e.target.value)}
+          <select
+            value={classId}
+            onChange={(e) => setClassId(e.target.value)}
+            disabled={isLoadingClasses}
             required
-          />
+          >
+            <option value="" disabled>
+              -- Select a class --
+            </option>
+            {classes?.map((cls) => (
+              <option key={cls.id} value={cls.id}>
+                {cls.name}
+              </option>
+            ))}
+          </select>
         </label>
+
         <label>
           Enrollment Date:
           <input

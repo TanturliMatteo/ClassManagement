@@ -21,7 +21,7 @@ export default function StudentsPage() {
       />
       {selectedStudent && (
         <FormEditStudent
-          student={selectedStudent}
+          studentData={selectedStudent}
           onClose={() => setSelectedStudent(null)}
         />
       )}

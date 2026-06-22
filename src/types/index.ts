@@ -18,6 +18,9 @@ export interface Class {
   id: string;
   created_at: string;
   name: string;
+  level: string;
+  details: string;
+  teachers: string;
 }
 
 export interface Lesson {
