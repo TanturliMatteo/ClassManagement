@@ -1,4 +1,4 @@
-import { supabase } from "../services/supbase";
+import { supabase } from "./supabase";
 import type { Class } from "../types";
 
 export const getClasses = async (): Promise<Class[]> => {

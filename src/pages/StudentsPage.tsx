@@ -1,5 +1,4 @@
 import type { StudentWithClass } from "../types";
-
 import { useState } from "react";
 import { useStudents } from "../hooks/useGetStudents";
 import StudentsTable from "../components/ui/StudentsTable";

@@ -28,6 +28,12 @@ export interface Lesson {
   created_at: string;
   title: string;
   description: string;
-  date_ora: string;
+  date: string;
   class_id: string;
+}
+
+export interface LessonWithClass extends Lesson {
+  Classes: {
+    name: string;
+  } | null;
 }

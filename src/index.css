@@ -187,6 +187,11 @@ a:hover {
   animation: fadeIn 0.2s ease-out;
 }
 
+.description-input {
+  border: 1px solid #ff0000;
+  max-width: 300px;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
