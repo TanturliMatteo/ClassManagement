@@ -93,6 +93,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
             required
           />
         </label>
+
         <label>
           End Date:
           <input
@@ -102,6 +103,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
             required
           />
         </label>
+
         <button type="button" onClick={onClose}>
           Close
         </button>
