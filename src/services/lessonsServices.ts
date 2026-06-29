@@ -1,5 +1,13 @@
 import { supabase } from "./supabase";
-import type { LessonWithClass } from "../types";
+import type { LessonWithClass, Lesson } from "../types";
+
+export const createLesson = async (newLesson: Lesson) => {
+  const { data, error } = await supabase.from("Lessons").insert(newLesson);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
 
 export const getLessons = async (): Promise<LessonWithClass[]> => {
   const { data, error } = await supabase

@@ -1,7 +1,7 @@
-import type { StudentWithClass } from "../../types/index";
+import type { StudentWithClass } from "../../../types/index";
 import { useState } from "react";
-import { useUpdateStudent } from "../../hooks/useUpdateStudent";
-import { useGetClasses } from "../../hooks/useGetClasses";
+import { useUpdateStudent } from "../../../hooks/useUpdateStudent";
+import { useGetClasses } from "../../../hooks/useGetClasses";
 
 interface FormEditStudentProps {
   studentData: StudentWithClass | null;

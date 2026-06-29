@@ -1,6 +1,14 @@
 import { supabase } from "./supabase";
 import type { Class } from "../types";
 
+export const createClass = async (newClass: Class) => {
+  const { data, error } = await supabase.from("Classes").insert(newClass);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
 export const getClasses = async (): Promise<Class[]> => {
   const { data, error } = await supabase.from("Classes").select("*");
   if (error) {

@@ -1,6 +1,7 @@
 import { useGetClasses } from "../hooks/useGetClasses";
 import ClassesTable from "../components/ui/ClassesTable";
-import FormEditClass from "../components/forms/FormEditClass";
+import FormEditClass from "../components/forms/update/FormEditClass";
+import FormInsertClass from "../components/forms/Insert/formInsertClass";
 import type { Class } from "../types";
 import { useState } from "react";
 import TableDashboards from "../components/layout/TableDashboards";
@@ -8,18 +9,23 @@ import TableDashboards from "../components/layout/TableDashboards";
 const ClassesPage = () => {
   const { data: classes, isLoading, isError, error } = useGetClasses();
   const [selectedClass, setSelectedClass] = useState<Class | null>(null);
+  const [isInsertFormOpen, setIsInsertFormOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
   if (isLoading) return <div>Caricamento in corso...</div>;
   if (isError) return <div>Errore: {error.message}</div>;
 
+  const search = searchTerm.toLowerCase().trim();
+
   const filteredClasses =
     classes?.filter((c) => {
+      if (!search) return true;
+
       return (
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.teachers.toLocaleLowerCase().includes(searchTerm.toLowerCase())
+        c.name?.toLowerCase().includes(search) ||
+        c.level?.toLowerCase().includes(search) ||
+        c.details?.toLowerCase().includes(search) ||
+        c.teachers?.toLowerCase().includes(search)
       );
     }) || [];
 
@@ -28,7 +34,7 @@ const ClassesPage = () => {
       <TableDashboards
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        onAddClick={() => setSelectedClass(null)}
+        onAddClick={() => setIsInsertFormOpen(true)}
       />
       <ClassesTable
         classes={filteredClasses}
@@ -40,6 +46,9 @@ const ClassesPage = () => {
           classData={selectedClass}
           onClose={() => setSelectedClass(null)}
         />
+      )}
+      {isInsertFormOpen && (
+        <FormInsertClass onClose={() => setIsInsertFormOpen(false)} />
       )}
     </>
   );

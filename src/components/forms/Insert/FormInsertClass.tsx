@@ -1,37 +1,30 @@
-import type { Class } from "../../types/index";
+import { useInsertClass } from "../../../hooks/useInsertClass";
 import { useState } from "react";
-import { useUpdateClass } from "../../hooks/useUpdateClass";
 
-interface FormEditClassProps {
-  classData: Class | null;
+interface FormInsertClassProps {
   onClose: () => void;
 }
 
-const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
-  const [name, setName] = useState(classData?.name || "");
-  const [level, setLevel] = useState(classData?.level || "");
-  const [details, setDetails] = useState(classData?.details || "");
-  const [teachers, setTeachers] = useState(classData?.teachers || "");
-  const { mutate, isPending } = useUpdateClass();
-
-  if (!classData) return <div className="modal-box">{"Class not found"}</div>;
+export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
+  const [name, setName] = useState("");
+  const [level, setLevel] = useState("");
+  const [details, setDetails] = useState("");
+  const [teachers, setTeachers] = useState("");
+  const { mutate, isPending } = useInsertClass();
 
   const handleConfirm = () => {
-    const dataToUpdate = {
-      name: name,
-      level: level,
-      details: details,
-      teachers: teachers,
+    const newClass = {
+      name,
+      level,
+      details,
+      teachers,
     };
 
-    mutate(
-      { id: classData.id, updates: dataToUpdate },
-      {
-        onSuccess: () => {
-          onClose();
-        },
+    mutate(newClass, {
+      onSuccess: () => {
+        onClose();
       },
-    );
+    });
   };
 
   return (
@@ -77,11 +70,11 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
           Close
         </button>
         <button type="button" onClick={handleConfirm} disabled={isPending}>
-          {isPending ? "Updating..." : "Update"}
+          {isPending ? "Creating..." : "Create"}
         </button>
       </div>
     </div>
   );
 };
 
-export default FormEditClass;
+export default FormInsertClass;

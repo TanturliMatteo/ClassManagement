@@ -1,5 +1,15 @@
 import { supabase } from "./supabase";
-import type { StudentWithClass } from "../types";
+import type { StudentWithClass, Student } from "../types";
+
+export const createStudent = async (newStudent: Omit<Student, "id">) => {
+  const { data, error } = await supabase
+    .from("Students")
+    .insert(newStudent as Student);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
 
 export const getStudents = async (): Promise<StudentWithClass[]> => {
   const { data, error } = await supabase.from("Students").select(`

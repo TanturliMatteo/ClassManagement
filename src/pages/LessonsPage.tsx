@@ -2,15 +2,17 @@ import type { Lesson } from "../types/index";
 import { useState } from "react";
 import { useLessons } from "../hooks/useGetLessons";
 import LessonsTable from "../components/ui/LessonsTable";
-import FormEditLesson from "../components/forms/FormEditLesson";
-import FormShowDescription from "../components/forms/FormShowDescription";
+import FormEditLesson from "../components/forms/update/FormEditLesson";
+import FormShowDescription from "../components/forms/update/FormShowDescription";
 import TableDashboards from "../components/layout/TableDashboards";
+import FormInsertLesson from "../components/forms/Insert/FormInsertLesson";
 
 export default function LessonsPage() {
   const { data: lessons, isLoading, isError, error } = useLessons();
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [showDescription, setShowDescription] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddingLesson, setIsAddingLesson] = useState(false);
 
   if (isLoading) return <div>Caricamento in corso...</div>;
   if (isError) return <div>Errore: {error.message}</div>;
@@ -31,7 +33,7 @@ export default function LessonsPage() {
       <TableDashboards
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        onAddClick={() => setSelectedLesson(null)}
+        onAddClick={() => setIsAddingLesson(true)}
       />
       <LessonsTable
         lessons={filteredLessons}
@@ -51,6 +53,9 @@ export default function LessonsPage() {
           description={showDescription}
           onClose={() => setShowDescription(null)}
         />
+      )}
+      {isAddingLesson && (
+        <FormInsertLesson onClose={() => setIsAddingLesson(false)} />
       )}
     </>
   );

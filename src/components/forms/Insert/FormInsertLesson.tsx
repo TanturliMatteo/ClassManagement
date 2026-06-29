@@ -1,40 +1,27 @@
-import type { Lesson } from "../../types/index";
+import { useInsertLesson } from "../../../hooks/useInsertLesson";
 import { useState } from "react";
-import { useUpdateLesson } from "../../hooks/useUpdateLessons";
-import { useGetClasses } from "../../hooks/useGetClasses";
+import { useGetClasses } from "../../../hooks/useGetClasses";
 
-interface FormEditLessonProps {
-  lessonData: Lesson | null;
+interface FormInsertLessonProps {
   onClose: () => void;
 }
 
-const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
-  const [title, setTitle] = useState(lessonData?.title || "");
-  const [date, setDate] = useState(lessonData?.date || "");
-  const [description, setDescription] = useState(lessonData?.description || "");
-  const [classId, setClassId] = useState(lessonData?.class_id || "");
+const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [classId, setClassId] = useState("");
+  const { mutate, isPending } = useInsertLesson();
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
-  const { mutate, isPending } = useUpdateLesson();
-
-  if (!lessonData)
-    return <div className="modal-box">{"Student not found"}</div>;
 
   const handleConfirm = () => {
-    const dataToUpdate = {
-      title: title,
-      date: date,
-      description: description,
+    const newLesson = {
+      title,
+      description,
+      date,
       class_id: classId,
     };
-
-    mutate(
-      { id: lessonData.id, updates: dataToUpdate },
-      {
-        onSuccess: () => {
-          onClose();
-        },
-      },
-    );
+    mutate(newLesson, { onSuccess: () => onClose() });
   };
 
   return (
@@ -115,7 +102,7 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
           </button>
 
           <button type="button" onClick={handleConfirm} disabled={isPending}>
-            {isPending ? "Salvataggio..." : "Confirm"}
+            {isPending ? "Creating......" : "Create"}
           </button>
         </div>
       </div>
@@ -123,4 +110,4 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
   );
 };
 
-export default FormEditLesson;
+export default FormInsertLesson;

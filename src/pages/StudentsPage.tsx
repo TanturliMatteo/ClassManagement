@@ -2,14 +2,16 @@ import type { StudentWithClass } from "../types";
 import { useState } from "react";
 import { useStudents } from "../hooks/useGetStudents";
 import StudentsTable from "../components/ui/StudentsTable";
-import FormEditStudent from "../components/forms/FormEditStudent";
+import FormEditStudent from "../components/forms/update/FormEditStudent";
 import TableDashboards from "../components/layout/TableDashboards";
+import FormInsertStudent from "../components/forms/insert/FormInsertStudent";
 
 export default function StudentsPage() {
   const { data: students, isLoading, isError, error } = useStudents();
   const [selectedStudent, setSelectedStudent] =
     useState<StudentWithClass | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isAddingStudent, setIsAddingStudent] = useState(false);
 
   if (isLoading) return <div>Caricamento in corso...</div>;
   if (isError) return <div>Errore: {error.message}</div>;
@@ -18,7 +20,9 @@ export default function StudentsPage() {
     students?.filter((s) => {
       const dataobj = new Date(s.enrollment_date ? s.enrollment_date : "");
       return (
-        s.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.Classes?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         dataobj.toLocaleDateString("it-IT").includes(searchTerm.toLowerCase())
       );
     }) || [];
@@ -28,7 +32,7 @@ export default function StudentsPage() {
       <TableDashboards
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        onAddClick={() => setSelectedStudent(null)}
+        onAddClick={() => setIsAddingStudent(true)}
       />
 
       <StudentsTable
@@ -40,6 +44,9 @@ export default function StudentsPage() {
           studentData={selectedStudent}
           onClose={() => setSelectedStudent(null)}
         />
+      )}
+      {isAddingStudent && (
+        <FormInsertStudent onClose={() => setIsAddingStudent(false)} />
       )}
     </>
   );
