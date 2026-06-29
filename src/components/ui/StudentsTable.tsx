@@ -1,5 +1,6 @@
 import type { StudentWithClass } from "../../types/index";
 import toDateITA from "../../utils/toDateITA";
+import checkEndDate from "../../utils/checkEndDate";
 
 interface StudentTableProps {
   students: StudentWithClass[] | undefined;
@@ -29,7 +30,15 @@ const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
             <td>{s.email}</td>
             <td>{s.Classes?.name || "Nessuna classe"}</td>
             <td>{toDateITA(s.enrollment_date)}</td>
-            <td>{toDateITA(s.end_date)}</td>
+            <td
+              style={
+                checkEndDate(s.end_date)
+                  ? { color: "red", fontWeight: "bold" }
+                  : {}
+              }
+            >
+              {toDateITA(s.end_date)}
+            </td>
             <td>
               <button onClick={() => onEditClick(s)}>Edit</button>
             </td>

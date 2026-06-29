@@ -16,10 +16,13 @@ export default function LessonsPage() {
   if (isError) return <div>Errore: {error.message}</div>;
 
   const filteredLessons =
-    lessons?.filter((lesson) => {
+    lessons?.filter((l) => {
+      const dataObj = new Date(l.date ? l.date : "");
       return (
-        lesson.title.toLowerCase().includes(searchTerm.toLowerCase()),
-        lesson.Classes?.name.toLowerCase().includes(searchTerm.toLowerCase())
+        l.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        l.Classes?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        l.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        dataObj.toLocaleDateString("it-IT").includes(searchTerm.toLowerCase())
       );
     }) || [];
 

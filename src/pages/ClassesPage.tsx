@@ -16,8 +16,10 @@ const ClassesPage = () => {
   const filteredClasses =
     classes?.filter((c) => {
       return (
-        c.name.toLowerCase().includes(searchTerm.toLowerCase()),
-        c.level.toLowerCase().includes(searchTerm.toLowerCase())
+        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.level.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.details.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.teachers.toLocaleLowerCase().includes(searchTerm.toLowerCase())
       );
     }) || [];
 

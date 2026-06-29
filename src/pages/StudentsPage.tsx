@@ -15,9 +15,13 @@ export default function StudentsPage() {
   if (isError) return <div>Errore: {error.message}</div>;
 
   const filteredStudents =
-    students?.filter((student) =>
-      student.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    ) || [];
+    students?.filter((s) => {
+      const dataobj = new Date(s.enrollment_date ? s.enrollment_date : "");
+      return (
+        s.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        dataobj.toLocaleDateString("it-IT").includes(searchTerm.toLowerCase())
+      );
+    }) || [];
 
   return (
     <>

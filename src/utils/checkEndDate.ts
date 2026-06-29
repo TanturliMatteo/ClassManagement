@@ -1,10 +1,14 @@
-const checkEndDate = (endDate: Date): boolean => {
-  const now = Date.now();
-  const thirtyDaysMs = 30 * 24 * 60 * 60 * 1000;
+const checkEndDate = (endDate: string | null | undefined): boolean => {
+  if (!endDate) return false;
 
-  const diff = endDate.getTime() - now;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  return diff >= 0 && diff <= thirtyDaysMs;
+  const thirtyDaysLater = new Date(today);
+  thirtyDaysLater.setDate(today.getDate() + 30);
+
+  const end = new Date(endDate);
+  return end >= today && end <= thirtyDaysLater;
 };
 
 export default checkEndDate;

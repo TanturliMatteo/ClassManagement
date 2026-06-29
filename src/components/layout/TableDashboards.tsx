@@ -11,14 +11,13 @@ const TableDashboards = ({
 }: TableDashboardsProps) => {
   return (
     <div className="table-dashboards">
-      <div>
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </div>
+      <input
+        type="text"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
+
       <div>
         <button onClick={onAddClick}>Add</button>
       </div>
