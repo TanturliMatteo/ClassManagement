@@ -90,14 +90,16 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          <label>Description:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            rows={4}
-            className="description-textarea ReadOnly"
-          />
+          <label>
+            Description:
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              rows={4}
+              className="description-textarea ReadOnly"
+            />
+          </label>
         </div>
 
         <div
