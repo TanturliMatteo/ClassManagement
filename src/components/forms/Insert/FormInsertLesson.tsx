@@ -7,10 +7,10 @@ interface FormInsertLessonProps {
 }
 
 const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [classId, setClassId] = useState("");
+  const [title, setTitle] = useState<string | null>(null);
+  const [description, setDescription] = useState<string | null>(null);
+  const [date, setDate] = useState<string | null>(null);
+  const [classId, setClassId] = useState<string | null>(null);
   const { mutate, isPending } = useInsertLesson();
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
 
@@ -40,7 +40,7 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
             Title:
             <input
               type="text"
-              value={title}
+              value={title ?? ""}
               onChange={(e) => setTitle(e.target.value)}
               required
             />
@@ -50,7 +50,7 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
             Date:
             <input
               type="date"
-              value={date}
+              value={date ?? ""}
               onChange={(e) => setDate(e.target.value)}
               required
             />
@@ -59,7 +59,7 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
           <label>
             Class:
             <select
-              value={classId}
+              value={classId ?? ""}
               onChange={(e) => setClassId(e.target.value)}
               disabled={isLoadingClasses}
               required
@@ -80,7 +80,7 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
           <label>
             Description:
             <textarea
-              value={description}
+              value={description ?? ""}
               onChange={(e) => setDescription(e.target.value)}
               required
               rows={4}

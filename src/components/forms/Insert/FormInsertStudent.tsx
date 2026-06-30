@@ -8,10 +8,10 @@ interface FormInsertStudentProps {
 
 const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [enrollment_date, setEnrollmentDate] = useState("");
-  const [end_date, setEndDate] = useState("");
-  const [class_id, setClass_id] = useState("");
+  const [email, setEmail] = useState<string | null>(null);
+  const [enrollment_date, setEnrollmentDate] = useState<string | null>(null);
+  const [end_date, setEndDate] = useState<string | null>(null);
+  const [class_id, setClass_id] = useState<string | null>(null);
   const { mutate, isPending } = useInsertStudent();
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
 
@@ -43,7 +43,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
           Email:
           <input
             type="text"
-            value={email}
+            value={email ?? ""}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -52,7 +52,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
         <label>
           Class:
           <select
-            value={class_id}
+            value={class_id ?? ""}
             onChange={(e) => setClass_id(e.target.value)}
             disabled={isLoadingClasses}
             required
@@ -72,7 +72,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
           Enrollment Date:
           <input
             type="date"
-            value={enrollment_date}
+            value={enrollment_date ?? ""}
             onChange={(e) => setEnrollmentDate(e.target.value)}
             required
           />
@@ -82,7 +82,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
           End Date:
           <input
             type="date"
-            value={end_date}
+            value={end_date ?? ""}
             onChange={(e) => setEndDate(e.target.value)}
             required
           />

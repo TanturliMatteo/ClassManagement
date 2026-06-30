@@ -2,6 +2,7 @@ import type { Lesson } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateLesson } from "../../../hooks/useUpdateLessons";
 import { useGetClasses } from "../../../hooks/useGetClasses";
+import { useDeleteLesson } from "../../../hooks/useDeleteLesson";
 
 interface FormEditLessonProps {
   lessonData: Lesson | null;
@@ -9,11 +10,16 @@ interface FormEditLessonProps {
 }
 
 const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
-  const [title, setTitle] = useState(lessonData?.title || "");
-  const [date, setDate] = useState(lessonData?.date || "");
-  const [description, setDescription] = useState(lessonData?.description || "");
-  const [classId, setClassId] = useState(lessonData?.class_id || "");
+  const [title, setTitle] = useState<string | null>(lessonData?.title || null);
+  const [date, setDate] = useState<string | null>(lessonData?.date || null);
+  const [description, setDescription] = useState<string | null>(
+    lessonData?.description || null,
+  );
+  const [classId, setClassId] = useState<string | null>(
+    lessonData?.class_id || null,
+  );
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
+  const { mutate: deleteLesson, isPending: isDeleting } = useDeleteLesson();
   const { mutate, isPending } = useUpdateLesson();
 
   if (!lessonData)
@@ -53,7 +59,7 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
             Title:
             <input
               type="text"
-              value={title}
+              value={title ?? ""}
               onChange={(e) => setTitle(e.target.value)}
               required
             />
@@ -63,7 +69,7 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
             Date:
             <input
               type="date"
-              value={date}
+              value={date ?? ""}
               onChange={(e) => setDate(e.target.value)}
               required
             />
@@ -72,7 +78,7 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
           <label>
             Class:
             <select
-              value={classId}
+              value={classId ?? ""}
               onChange={(e) => setClassId(e.target.value)}
               disabled={isLoadingClasses}
               required
@@ -93,7 +99,7 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
           <label>
             Description:
             <textarea
-              value={description}
+              value={description ?? ""}
               onChange={(e) => setDescription(e.target.value)}
               required
               rows={4}
@@ -116,6 +122,21 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
 
           <button type="button" onClick={handleConfirm} disabled={isPending}>
             {isPending ? "Salvataggio..." : "Confirm"}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              if (lessonData) {
+                deleteLesson(lessonData.id);
+              }
+              {
+                onClose();
+              }
+            }}
+            disabled={isDeleting}
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>

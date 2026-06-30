@@ -1,10 +1,11 @@
-import type { ClassWithTeacher } from "../../../types/index";
+import type { Class } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateClass } from "../../../hooks/useUpdateClass";
 import { useGetTeachers } from "../../../hooks/useGetTeachers";
+import { useDeleteClass } from "../../../hooks/useDeleteClass";
 
 interface FormEditClassProps {
-  classData: ClassWithTeacher | null;
+  classData: Class | null;
   onClose: () => void;
 }
 
@@ -12,8 +13,11 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
   const [name, setName] = useState(classData?.name || "");
   const [level, setLevel] = useState(classData?.level || "");
   const [details, setDetails] = useState(classData?.details || "");
-  const [teacher_id, setTeacherId] = useState(classData?.teacher_id || "");
+  const [teacher_id, setTeacherId] = useState<string | null>(
+    classData?.teacher_id || null,
+  );
   const { mutate, isPending } = useUpdateClass();
+  const { mutate: deleteClass, isPending: isDeleting } = useDeleteClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
   if (!classData) return <div className="modal-box">{"Class not found"}</div>;
@@ -72,8 +76,8 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
         <label>
           teacher:
           <select
-            value={teacher_id}
-            onChange={(e) => setTeacherId(e.target.value)}
+            value={teacher_id ?? ""}
+            onChange={(e) => setTeacherId(e.target.value || null)}
             disabled={isLoadingTeachers}
             required
           >
@@ -94,6 +98,21 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
 
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Updating..." : "Update"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            if (classData) {
+              deleteClass(classData.id);
+            }
+            {
+              onClose();
+            }
+          }}
+          disabled={isDeleting}
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
         </button>
       </div>
     </div>

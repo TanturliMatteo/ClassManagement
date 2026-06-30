@@ -36,3 +36,9 @@ export const updateLesson = async (
   if (error) throw new Error(error.message);
   return data;
 };
+
+export const deleteLesson = async (id: string) => {
+  const { data, error } = await supabase.from("Lessons").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  return data;
+};

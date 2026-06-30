@@ -34,3 +34,9 @@ export const updateTeacher = async (id: string, updates: Partial<Teacher>) => {
   if (error) throw new Error(error.message);
   return data;
 };
+
+export const deleteTeacher = async (id: string) => {
+  const { data, error } = await supabase.from("Teachers").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  return data;
+};

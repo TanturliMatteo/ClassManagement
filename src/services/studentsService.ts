@@ -35,3 +35,9 @@ export const updateStudent = async (
   if (error) throw new Error(error.message);
   return data;
 };
+
+export const deleteStudent = async (id: string) => {
+  const { data, error } = await supabase.from("Students").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  return data;
+};

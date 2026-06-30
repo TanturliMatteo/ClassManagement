@@ -6,9 +6,9 @@ interface FormInsertTeacherProps {
 }
 
 const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
-  const [name, setName] = useState("");
-  const [admin_access, setAdmin_access] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState<string | null>(null);
+  const [admin_access, setAdmin_access] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const { mutate, isPending } = useInsertTeacher();
 
   const handleConfirm = () => {
@@ -27,7 +27,7 @@ const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
           Name:
           <input
             type="text"
-            value={name}
+            value={name ?? ""}
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -37,7 +37,7 @@ const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
           Email:
           <input
             type="email"
-            value={email}
+            value={email ?? ""}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -46,7 +46,7 @@ const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
         <label>
           Admin Privileges:
           <select
-            value={admin_access}
+            value={admin_access ?? ""}
             onChange={(e) => setAdmin_access(e.target.value)}
             required
           >

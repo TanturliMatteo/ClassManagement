@@ -2,6 +2,7 @@ import type { StudentWithClass } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateStudent } from "../../../hooks/useUpdateStudent";
 import { useGetClasses } from "../../../hooks/useGetClasses";
+import { useDeleteStudent } from "../../../hooks/useDeleteStudent";
 
 interface FormEditStudentProps {
   studentData: StudentWithClass | null;
@@ -9,15 +10,19 @@ interface FormEditStudentProps {
 }
 
 const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
-  const [name, setName] = useState(studentData?.name || "");
-  const [email, setEmail] = useState(studentData?.email || "");
-  const [class_id, setClass_id] = useState(studentData?.class_id || "");
-  const [enrollment_date, setEnrollment_date] = useState(
-    studentData?.enrollment_date || "",
+  const [name, setName] = useState<string | null>(studentData?.name || null);
+  const [email, setEmail] = useState<string | null>(studentData?.email || null);
+  const [class_id, setClass_id] = useState<string | null>(
+    studentData?.class_id || null,
   );
-  const [end_date, setEnd_date] = useState(studentData?.end_date || "");
+  const [enrollment_date, setEnrollment_date] = useState<string | null>(
+    studentData?.enrollment_date || null,
+  );
+  const [end_date, setEnd_date] = useState<string | null>(
+    studentData?.end_date || null,
+  );
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
-
+  const { mutate: deleteStudent, isPending: isDeleting } = useDeleteStudent();
   const { mutate, isPending } = useUpdateStudent();
 
   if (!studentData)
@@ -49,7 +54,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           Name:
           <input
             type="text"
-            value={name}
+            value={name ?? ""}
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -59,7 +64,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           Email:
           <input
             type="text"
-            value={email}
+            value={email ?? ""}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -68,7 +73,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
         <label>
           Class:
           <select
-            value={class_id}
+            value={class_id ?? ""}
             onChange={(e) => setClass_id(e.target.value)}
             disabled={isLoadingClasses}
             required
@@ -88,7 +93,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           Enrollment Date:
           <input
             type="date"
-            value={enrollment_date}
+            value={enrollment_date ?? ""}
             onChange={(e) => setEnrollment_date(e.target.value)}
             required
           />
@@ -98,7 +103,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           End Date:
           <input
             type="date"
-            value={end_date}
+            value={end_date ?? ""}
             onChange={(e) => setEnd_date(e.target.value)}
             required
           />
@@ -109,6 +114,19 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
         </button>
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Salvataggio..." : "Confirm"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            if (studentData) {
+              deleteStudent(studentData.id);
+            }
+            onClose();
+          }}
+          disabled={isDeleting}
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
         </button>
       </div>
     </div>

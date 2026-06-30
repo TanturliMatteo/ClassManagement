@@ -33,11 +33,11 @@ const LessonsTable = ({
             <td className="table-td-max-width">{l.title}</td>
             <td>
               <button
-                onClick={() => onDescriptionClick(l.description)}
-                style={{ color: "black", background: "white" }}
+                onClick={() => onDescriptionClick(l.description ?? "")}
+                style={{ color: "black", background: "none" }}
                 className="table-td-max-width"
               >
-                {truncateWords(l.description, 6)}
+                {truncateWords(l.description ?? "", 6)}
               </button>
             </td>
             <td>{toDateITA(l.date)}</td>

@@ -1,8 +1,8 @@
 export interface Student {
   id: string;
-  created_at: string;
-  name: string;
-  email: string;
+  created_at: string | null;
+  name: string | null;
+  email: string | null;
   class_id: string | null;
   enrollment_date: string | null;
   end_date: string | null;
@@ -16,11 +16,11 @@ export interface StudentWithClass extends Student {
 
 export interface Class {
   id: string;
-  created_at: string;
-  name: string;
-  level: string;
-  details: string;
-  teacher_id: string;
+  created_at: string | null;
+  name: string | null;
+  level: string | null;
+  details: string | null;
+  teacher_id: string | null;
 }
 
 export interface ClassWithTeacher extends Class {
@@ -29,11 +29,11 @@ export interface ClassWithTeacher extends Class {
 
 export interface Lesson {
   id: string;
-  created_at: string;
-  title: string;
-  description: string;
-  date: string;
-  class_id: string;
+  created_at: string | null;
+  title: string | null;
+  description: string | null;
+  date: string | null;
+  class_id: string | null;
 }
 
 export interface LessonWithClass extends Lesson {
@@ -44,7 +44,7 @@ export interface LessonWithClass extends Lesson {
 
 export interface Teacher {
   id: string;
-  name: string;
+  name: string | null;
   admin_access: boolean;
-  email: string;
+  email: string | null;
 }

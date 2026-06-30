@@ -18,8 +18,9 @@ export default function TeachersPage() {
   const filteredTeachers =
     teachers?.filter((t) => {
       return (
-        t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.isAdmin.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        t.id ||
+        t.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        t.email?.toString().toLowerCase().includes(searchTerm.toLowerCase())
       );
     }) || [];
 

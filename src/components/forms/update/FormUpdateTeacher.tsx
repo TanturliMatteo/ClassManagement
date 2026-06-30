@@ -1,6 +1,7 @@
 import type { Teacher } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateTeacher } from "../../../hooks/useUpdateTeacher";
+import { useDeleteTeacher } from "../../../hooks/useDeleteTeacher";
 
 interface FormUpdateTeacherProps {
   teacherData: Teacher | null;
@@ -11,11 +12,12 @@ const FormUpdateTeacher = ({
   teacherData,
   onClose,
 }: FormUpdateTeacherProps) => {
-  const [name, setName] = useState(teacherData?.name || "");
-  const [admin_access, setAdmin_access] = useState(
-    teacherData?.admin_access?.toString() || "",
+  const [name, setName] = useState<string | null>(teacherData?.name || null);
+  const [admin_access, setAdmin_access] = useState<string | null>(
+    teacherData?.admin_access?.toString() || null,
   );
-  const [email, setEmail] = useState(teacherData?.email || "");
+  const [email, setEmail] = useState<string | null>(teacherData?.email || null);
+  const { mutate: deleteTeacher, isPending: isDeleting } = useDeleteTeacher();
   const { mutate, isPending } = useUpdateTeacher();
 
   if (!teacherData)
@@ -45,7 +47,7 @@ const FormUpdateTeacher = ({
           Name:
           <input
             type="text"
-            value={name}
+            value={name ?? ""}
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -55,7 +57,7 @@ const FormUpdateTeacher = ({
           Email:
           <input
             type="email"
-            value={email}
+            value={email ?? ""}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
@@ -64,7 +66,7 @@ const FormUpdateTeacher = ({
         <label>
           Admin Privileges:
           <select
-            value={admin_access}
+            value={admin_access ?? ""}
             onChange={(e) => setAdmin_access(e.target.value)}
             required
           >
@@ -81,6 +83,19 @@ const FormUpdateTeacher = ({
         </button>
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Salvataggio..." : "Confirm"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            if (teacherData) {
+              deleteTeacher(teacherData.id);
+            }
+            onClose();
+          }}
+          disabled={isDeleting}
+        >
+          {isDeleting ? "Deleting..." : "Delete"}
         </button>
       </div>
     </div>

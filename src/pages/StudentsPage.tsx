@@ -19,11 +19,17 @@ export default function StudentsPage() {
   const filteredStudents =
     students?.filter((s) => {
       const dataobj = new Date(s.enrollment_date ? s.enrollment_date : "");
+      const dataObjEnd = new Date(s.end_date ? s.end_date : "");
       return (
-        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        s.Classes?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        dataobj.toLocaleDateString("it-IT").includes(searchTerm.toLowerCase())
+        s.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        s.Classes?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        dataobj
+          .toLocaleDateString("it-IT")
+          .includes(searchTerm.toLowerCase()) ||
+        dataObjEnd
+          .toLocaleDateString("it-IT")
+          .includes(searchTerm.toLowerCase())
       );
     }) || [];
 

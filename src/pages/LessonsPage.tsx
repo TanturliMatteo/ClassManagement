@@ -21,9 +21,9 @@ export default function LessonsPage() {
     lessons?.filter((l) => {
       const dataObj = new Date(l.date ? l.date : "");
       return (
-        l.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        l.Classes?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        l.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        l.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        l.Classes?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        l.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         dataObj.toLocaleDateString("it-IT").includes(searchTerm.toLowerCase())
       );
     }) || [];
