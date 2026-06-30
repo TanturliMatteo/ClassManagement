@@ -1,5 +1,6 @@
 import { useInsertClass } from "../../../hooks/useInsertClass";
 import { useState } from "react";
+import { useGetTeachers } from "../../../hooks/useGetTeachers";
 
 interface FormInsertClassProps {
   onClose: () => void;
@@ -11,6 +12,7 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
   const [details, setDetails] = useState("");
   const [teachers, setTeachers] = useState("");
   const { mutate, isPending } = useInsertClass();
+  const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
   const handleConfirm = () => {
     const newClass = {
@@ -39,6 +41,7 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
             required
           />
         </label>
+
         <label>
           Level:
           <input
@@ -48,6 +51,7 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
             required
           />
         </label>
+
         <label>
           Details:
           <input
@@ -57,18 +61,30 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
             required
           />
         </label>
+
         <label>
-          Teachers:
-          <input
-            type="text"
+          teacher:
+          <select
             value={teachers}
             onChange={(e) => setTeachers(e.target.value)}
+            disabled={isLoadingTeachers}
             required
-          />
+          >
+            <option value="" disabled>
+              -- Select a teacher --
+            </option>
+            {teachersData?.map((teacher) => (
+              <option key={teacher.id} value={teacher.id}>
+                {teacher.name}
+              </option>
+            ))}
+          </select>
         </label>
+
         <button type="button" onClick={onClose}>
           Close
         </button>
+
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Creating..." : "Create"}
         </button>

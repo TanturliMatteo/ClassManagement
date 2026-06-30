@@ -1,9 +1,10 @@
-import type { Class } from "../../../types/index";
+import type { ClassWithTeachers } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateClass } from "../../../hooks/useUpdateClass";
+import { useGetTeachers } from "../../../hooks/useGetTeachers";
 
 interface FormEditClassProps {
-  classData: Class | null;
+  classData: ClassWithTeachers | null;
   onClose: () => void;
 }
 
@@ -11,17 +12,18 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
   const [name, setName] = useState(classData?.name || "");
   const [level, setLevel] = useState(classData?.level || "");
   const [details, setDetails] = useState(classData?.details || "");
-  const [teachers, setTeachers] = useState(classData?.teachers || "");
+  const [teacher, setTeacher] = useState(classData?.teacher || "");
   const { mutate, isPending } = useUpdateClass();
+  const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
   if (!classData) return <div className="modal-box">{"Class not found"}</div>;
 
   const handleConfirm = () => {
     const dataToUpdate = {
-      name: name,
-      level: level,
-      details: details,
-      teachers: teachers,
+      name,
+      level,
+      details,
+      teacher,
     };
 
     mutate(
@@ -46,6 +48,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             required
           />
         </label>
+
         <label>
           Level:
           <input
@@ -55,6 +58,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             required
           />
         </label>
+
         <label>
           Details:
           <input
@@ -64,18 +68,30 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             required
           />
         </label>
+
         <label>
-          Teachers:
-          <input
-            type="text"
-            value={teachers}
-            onChange={(e) => setTeachers(e.target.value)}
+          teacher:
+          <select
+            value={teacher}
+            onChange={(e) => setTeacher(e.target.value)}
+            disabled={isLoadingTeachers}
             required
-          />
+          >
+            <option value="" disabled>
+              -- Select a teacher --
+            </option>
+            {teachersData?.map((teacher) => (
+              <option key={teacher.id} value={teacher.id}>
+                {teacher.name}
+              </option>
+            ))}
+          </select>
         </label>
+
         <button type="button" onClick={onClose}>
           Close
         </button>
+
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Updating..." : "Update"}
         </button>

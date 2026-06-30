@@ -11,7 +11,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
   const [email, setEmail] = useState("");
   const [enrollment_date, setEnrollmentDate] = useState("");
   const [end_date, setEndDate] = useState("");
-  const [classId, setClassId] = useState("");
+  const [class_id, setClass_id] = useState("");
   const { mutate, isPending } = useInsertStudent();
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
 
@@ -19,7 +19,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
     const newStudent = {
       name,
       email,
-      class_id: classId,
+      class_id,
       enrollment_date,
       end_date,
     };
@@ -52,8 +52,8 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
         <label>
           Class:
           <select
-            value={classId}
-            onChange={(e) => setClassId(e.target.value)}
+            value={class_id}
+            onChange={(e) => setClass_id(e.target.value)}
             disabled={isLoadingClasses}
             required
           >

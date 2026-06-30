@@ -14,14 +14,7 @@ export const createStudent = async (newStudent: Omit<Student, "id">) => {
 export const getStudents = async (): Promise<StudentWithClass[]> => {
   const { data, error } = await supabase
     .from("Students")
-    .select(
-      `
-      *,
-      Classes (
-        name
-      )
-    `,
-    )
+    .select("*,Classes(name)")
     .order("name", { ascending: true });
 
   if (error) {

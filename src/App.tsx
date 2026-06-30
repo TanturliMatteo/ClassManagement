@@ -5,6 +5,7 @@ import Students from "./pages/StudentsPage.tsx";
 import ClassesPage from "./pages/ClassesPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import LessonsPage from "./pages/LessonsPage.tsx";
+import TeachersPage from "./pages/TeachersPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/lessons",
         element: <LessonsPage />,
+      },
+      {
+        path: "/teachers",
+        element: <TeachersPage />,
       },
       { path: "*", element: <NotFoundPage /> },
     ],

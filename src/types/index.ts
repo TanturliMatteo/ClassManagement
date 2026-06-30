@@ -23,6 +23,10 @@ export interface Class {
   teachers: string;
 }
 
+export interface ClassWithTeacher extends Class {
+  teacher: { name: string } | null;
+}
+
 export interface Lesson {
   id: string;
   created_at: string;
@@ -41,11 +45,6 @@ export interface LessonWithClass extends Lesson {
 export interface Teacher {
   id: string;
   name: string;
-  isAdmin: boolean;
-}
-
-export interface TeacherWithClass extends Teacher {
-  Classes: {
-    name: string;
-  } | null;
+  admin_access: boolean;
+  email: string;
 }

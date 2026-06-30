@@ -2,7 +2,7 @@ import type { Lesson } from "../types/index";
 import { useState } from "react";
 import { useLessons } from "../hooks/useGetLessons";
 import LessonsTable from "../components/ui/LessonsTable";
-import FormEditLesson from "../components/forms/update/FormEditLesson";
+import FormEditLesson from "../components/forms/update/FormUpdateLesson";
 import FormShowDescription from "../components/forms/update/FormShowDescription";
 import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertLesson from "../components/forms/insert/FormInsertLesson";

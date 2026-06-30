@@ -2,7 +2,7 @@ import type { StudentWithClass } from "../types";
 import { useState } from "react";
 import { useStudents } from "../hooks/useGetStudents";
 import StudentsTable from "../components/ui/StudentsTable";
-import FormEditStudent from "../components/forms/update/FormEditStudent";
+import FormEditStudent from "../components/forms/update/FormUpdateStudent";
 import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertStudent from "../components/forms/insert/FormInsertStudent";
 

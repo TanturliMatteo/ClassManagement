@@ -1,7 +1,7 @@
 import { supabase } from "./supabase";
-import type { Class } from "../types";
+import type { ClassWithTeacher } from "../types";
 
-export const createClass = async (newClass: Class) => {
+export const createClass = async (newClass: ClassWithTeacher) => {
   const { data, error } = await supabase.from("Classes").insert(newClass);
   if (error) {
     throw new Error(error.message);
@@ -9,18 +9,21 @@ export const createClass = async (newClass: Class) => {
   return data;
 };
 
-export const getClasses = async (): Promise<Class[]> => {
+export const getClasses = async (): Promise<ClassWithTeacher[]> => {
   const { data, error } = await supabase
     .from("Classes")
-    .select("*")
+    .select("*, teacher(name)")
     .order("level", { ascending: true });
   if (error) {
     throw new Error(error.message);
   }
-  return data as Class[];
+  return data as ClassWithTeacher[];
 };
 
-export const updateClass = async (id: string, updates: Partial<Class>) => {
+export const updateClass = async (
+  id: string,
+  updates: Partial<ClassWithTeacher>,
+) => {
   const { data, error } = await supabase
     .from("Classes")
     .update(updates)

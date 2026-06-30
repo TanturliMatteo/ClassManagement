@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTeacher } from "../services/teachersServices";
 import type { Teacher } from "../types/index";
 
-export const useInsertStudent = () => {
+export const useInsertTeacher = () => {
   const queryClient = useQueryClient();
 
   return useMutation({

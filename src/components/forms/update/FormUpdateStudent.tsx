@@ -11,11 +11,11 @@ interface FormEditStudentProps {
 const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
   const [name, setName] = useState(studentData?.name || "");
   const [email, setEmail] = useState(studentData?.email || "");
-  const [classId, setClassId] = useState(studentData?.class_id || "");
-  const [enrollmentDate, setEnrollmentDate] = useState(
+  const [class_id, setClass_id] = useState(studentData?.class_id || "");
+  const [enrollment_date, setEnrollment_date] = useState(
     studentData?.enrollment_date || "",
   );
-  const [endDate, setEndDate] = useState(studentData?.end_date || "");
+  const [end_date, setEnd_date] = useState(studentData?.end_date || "");
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
 
   const { mutate, isPending } = useUpdateStudent();
@@ -25,11 +25,11 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
 
   const handleConfirm = () => {
     const dataToUpdate = {
-      name: name,
-      class_id: classId,
-      email: email,
-      enrollment_date: enrollmentDate,
-      end_date: endDate,
+      name,
+      class_id,
+      email,
+      enrollment_date,
+      end_date,
     };
 
     mutate(
@@ -68,8 +68,8 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
         <label>
           Class:
           <select
-            value={classId}
-            onChange={(e) => setClassId(e.target.value)}
+            value={class_id}
+            onChange={(e) => setClass_id(e.target.value)}
             disabled={isLoadingClasses}
             required
           >
@@ -88,8 +88,8 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           Enrollment Date:
           <input
             type="date"
-            value={enrollmentDate}
-            onChange={(e) => setEnrollmentDate(e.target.value)}
+            value={enrollment_date}
+            onChange={(e) => setEnrollment_date(e.target.value)}
             required
           />
         </label>
@@ -98,8 +98,8 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           End Date:
           <input
             type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            value={end_date}
+            onChange={(e) => setEnd_date(e.target.value)}
             required
           />
         </label>

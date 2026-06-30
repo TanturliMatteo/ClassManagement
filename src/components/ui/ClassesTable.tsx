@@ -1,9 +1,9 @@
-import type { Class } from "../../types/index";
+import type { ClassWithTeacher } from "../../types/index";
 
 interface ClassesTableProps {
-  classes: Class[] | undefined;
-  onEditClick: (classItem: Class) => void;
-  onShowClick: (classItem: Class) => void;
+  classes: ClassWithTeacher[] | undefined;
+  onEditClick: (classItem: ClassWithTeacher) => void;
+  onShowClick: (classItem: ClassWithTeacher) => void;
 }
 
 const ClassesTable = ({ classes, onEditClick }: ClassesTableProps) => {
@@ -18,7 +18,7 @@ const ClassesTable = ({ classes, onEditClick }: ClassesTableProps) => {
           <th>Name</th>
           <th>Level</th>
           <th>Details</th>
-          <th>Teachers</th>
+          <th>Teacher</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -28,7 +28,7 @@ const ClassesTable = ({ classes, onEditClick }: ClassesTableProps) => {
             <td>{c.name}</td>
             <td>{c.level}</td>
             <td>{c.details}</td>
-            <td>{c.teachers}</td>
+            <td>{c.teacher?.name}</td>
             <td>
               <button onClick={() => onEditClick(c)}>Edit</button>
             </td>
