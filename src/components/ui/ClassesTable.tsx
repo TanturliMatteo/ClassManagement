@@ -28,7 +28,7 @@ const ClassesTable = ({ classes, onEditClick }: ClassesTableProps) => {
             <td>{c.name}</td>
             <td>{c.level}</td>
             <td>{c.details}</td>
-            <td>{c.teacher?.name}</td>
+            <td>{c.Teachers?.name}</td>
             <td>
               <button onClick={() => onEditClick(c)}>Edit</button>
             </td>

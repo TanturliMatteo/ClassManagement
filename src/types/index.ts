@@ -20,11 +20,11 @@ export interface Class {
   name: string;
   level: string;
   details: string;
-  teachers: string;
+  teacher_id: string;
 }
 
 export interface ClassWithTeacher extends Class {
-  teacher: { name: string } | null;
+  Teachers: { name: string } | null;
 }
 
 export interface Lesson {

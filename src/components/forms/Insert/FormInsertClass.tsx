@@ -10,17 +10,12 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
   const [name, setName] = useState("");
   const [level, setLevel] = useState("");
   const [details, setDetails] = useState("");
-  const [teachers, setTeachers] = useState("");
+  const [teacher_id, setTeacherId] = useState("");
   const { mutate, isPending } = useInsertClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
   const handleConfirm = () => {
-    const newClass = {
-      name,
-      level,
-      details,
-      teachers,
-    };
+    const newClass = { name, level, details, teacher_id };
 
     mutate(newClass, {
       onSuccess: () => {
@@ -65,8 +60,8 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
         <label>
           teacher:
           <select
-            value={teachers}
-            onChange={(e) => setTeachers(e.target.value)}
+            value={teacher_id}
+            onChange={(e) => setTeacherId(e.target.value)}
             disabled={isLoadingTeachers}
             required
           >

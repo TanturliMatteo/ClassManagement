@@ -1,10 +1,10 @@
-import type { ClassWithTeachers } from "../../../types/index";
+import type { ClassWithTeacher } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateClass } from "../../../hooks/useUpdateClass";
 import { useGetTeachers } from "../../../hooks/useGetTeachers";
 
 interface FormEditClassProps {
-  classData: ClassWithTeachers | null;
+  classData: ClassWithTeacher | null;
   onClose: () => void;
 }
 
@@ -12,7 +12,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
   const [name, setName] = useState(classData?.name || "");
   const [level, setLevel] = useState(classData?.level || "");
   const [details, setDetails] = useState(classData?.details || "");
-  const [teacher, setTeacher] = useState(classData?.teacher || "");
+  const [teacher_id, setTeacherId] = useState(classData?.teacher_id || "");
   const { mutate, isPending } = useUpdateClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
@@ -23,7 +23,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
       name,
       level,
       details,
-      teacher,
+      teacher_id,
     };
 
     mutate(
@@ -72,17 +72,17 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
         <label>
           teacher:
           <select
-            value={teacher}
-            onChange={(e) => setTeacher(e.target.value)}
+            value={teacher_id}
+            onChange={(e) => setTeacherId(e.target.value)}
             disabled={isLoadingTeachers}
             required
           >
             <option value="" disabled>
               -- Select a teacher --
             </option>
-            {teachersData?.map((teacher) => (
-              <option key={teacher.id} value={teacher.id}>
-                {teacher.name}
+            {teachersData?.map((t) => (
+              <option key={t.id} value={t.id}>
+                {t.name}
               </option>
             ))}
           </select>

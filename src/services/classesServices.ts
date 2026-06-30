@@ -1,8 +1,12 @@
 import { supabase } from "./supabase";
-import type { ClassWithTeacher } from "../types";
+import type { ClassWithTeacher, Class } from "../types";
 
-export const createClass = async (newClass: ClassWithTeacher) => {
-  const { data, error } = await supabase.from("Classes").insert(newClass);
+export const createClass = async (
+  newClass: Omit<Class, "id" | "created_at">,
+) => {
+  const { data, error } = await supabase
+    .from("Classes")
+    .insert(newClass as Class);
   if (error) {
     throw new Error(error.message);
   }
@@ -12,7 +16,7 @@ export const createClass = async (newClass: ClassWithTeacher) => {
 export const getClasses = async (): Promise<ClassWithTeacher[]> => {
   const { data, error } = await supabase
     .from("Classes")
-    .select("*, teacher(name)")
+    .select("*,Teachers(name)")
     .order("level", { ascending: true });
   if (error) {
     throw new Error(error.message);
@@ -28,6 +32,14 @@ export const updateClass = async (
     .from("Classes")
     .update(updates)
     .eq("id", id);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
+export const deleteClass = async (id: string) => {
+  const { data, error } = await supabase.from("Classes").delete().eq("id", id);
   if (error) {
     throw new Error(error.message);
   }
