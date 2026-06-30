@@ -10,7 +10,10 @@ export const createClass = async (newClass: Class) => {
 };
 
 export const getClasses = async (): Promise<Class[]> => {
-  const { data, error } = await supabase.from("Classes").select("*");
+  const { data, error } = await supabase
+    .from("Classes")
+    .select("*")
+    .order("level", { ascending: true });
   if (error) {
     throw new Error(error.message);
   }

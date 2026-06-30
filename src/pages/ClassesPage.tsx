@@ -1,7 +1,7 @@
 import { useGetClasses } from "../hooks/useGetClasses";
 import ClassesTable from "../components/ui/ClassesTable";
 import FormEditClass from "../components/forms/update/FormEditClass";
-import FormInsertClass from "../components/forms/Insert/formInsertClass";
+import FormInsertClass from "../components/forms/insert/formInsertClass";
 import type { Class } from "../types";
 import { useState } from "react";
 import TableDashboards from "../components/layout/TableDashboards";

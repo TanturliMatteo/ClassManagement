@@ -5,7 +5,7 @@ import LessonsTable from "../components/ui/LessonsTable";
 import FormEditLesson from "../components/forms/update/FormEditLesson";
 import FormShowDescription from "../components/forms/update/FormShowDescription";
 import TableDashboards from "../components/layout/TableDashboards";
-import FormInsertLesson from "../components/forms/Insert/FormInsertLesson";
+import FormInsertLesson from "../components/forms/insert/FormInsertLesson";
 
 export default function LessonsPage() {
   const { data: lessons, isLoading, isError, error } = useLessons();

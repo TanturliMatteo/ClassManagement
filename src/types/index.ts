@@ -37,3 +37,15 @@ export interface LessonWithClass extends Lesson {
     name: string;
   } | null;
 }
+
+export interface Teacher {
+  id: string;
+  name: string;
+  isAdmin: boolean;
+}
+
+export interface TeacherWithClass extends Teacher {
+  Classes: {
+    name: string;
+  } | null;
+}

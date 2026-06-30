@@ -1,8 +1,10 @@
 import { supabase } from "./supabase";
 import type { LessonWithClass, Lesson } from "../types";
 
-export const createLesson = async (newLesson: Lesson) => {
-  const { data, error } = await supabase.from("Lessons").insert(newLesson);
+export const createLesson = async (newLesson: Omit<Lesson, "id">) => {
+  const { data, error } = await supabase
+    .from("Lessons")
+    .insert(newLesson as Lesson);
   if (error) {
     throw new Error(error.message);
   }
@@ -12,7 +14,8 @@ export const createLesson = async (newLesson: Lesson) => {
 export const getLessons = async (): Promise<LessonWithClass[]> => {
   const { data, error } = await supabase
     .from("Lessons")
-    .select("*,Classes(name)");
+    .select("*,Classes(name)")
+    .order("date", { ascending: true });
 
   if (error) {
     throw new Error(error.message);

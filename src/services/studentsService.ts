@@ -12,12 +12,17 @@ export const createStudent = async (newStudent: Omit<Student, "id">) => {
 };
 
 export const getStudents = async (): Promise<StudentWithClass[]> => {
-  const { data, error } = await supabase.from("Students").select(`
+  const { data, error } = await supabase
+    .from("Students")
+    .select(
+      `
       *,
       Classes (
         name
       )
-    `);
+    `,
+    )
+    .order("name", { ascending: true });
 
   if (error) {
     throw new Error(error.message);
