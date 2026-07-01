@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getStudents } from "../services/studentsService";
 
-export const useStudents = () => {
+export const useGetStudents = () => {
   return useQuery({
     queryKey: ["students"],
     queryFn: getStudents,

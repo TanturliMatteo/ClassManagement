@@ -34,6 +34,13 @@ body {
   width: 80%;
 }
 
+.header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .header {
   width: auto;
   height: auto;
@@ -119,6 +126,7 @@ button {
   cursor: pointer;
   border-radius: 0.25rem;
   align-self: flex-end;
+  font-size: 1.15rem;
 }
 
 button:hover {
@@ -128,6 +136,38 @@ button:hover {
 button.description-button {
   width: 100%;
   background-color: #45a049;
+}
+
+button.login-button {
+  align-self: center;
+}
+
+.logout-btn {
+  background-color: white;
+  color: black;
+  border-radius: 2rem;
+  margin-left: 0;
+}
+
+.logout-btn:hover {
+  background-color: #ff2600b9;
+  color: white;
+}
+
+.delete-btn {
+  background-color: #ff2600cc;
+}
+
+.delete-btn:hover {
+  background-color: #c91e00de;
+}
+
+.cancel-btn {
+  background-color: #00a2ffcc;
+}
+
+.cancel-btn:hover {
+  background-color: #007acc;
 }
 
 /* label */
@@ -145,7 +185,7 @@ input {
   padding: 0.5rem;
   width: 100%;
   box-sizing: border-box;
-  font-size: 1rem;
+  font-size: 1.15rem;
   margin: 0.25rem;
 }
 
@@ -157,7 +197,7 @@ select {
   padding: 0.5rem;
   width: 100%;
   box-sizing: border-box;
-  font-size: 1rem;
+  font-size: 1.15rem;
   margin: 0.25rem;
 }
 
@@ -174,6 +214,7 @@ a {
   background-color: #4caf50;
   border-radius: 2rem;
 }
+
 .nav-link.active {
   color: white;
   transition: background-color 0.3s ease;
@@ -183,8 +224,13 @@ a {
 
 /* logo */
 .logo {
-  height: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 160px;
   width: auto;
+  z-index: 100;
 }
 
 /* MODAL */
@@ -263,6 +309,83 @@ a {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* Login */
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem;
+  font-size: 1.2rem;
+  border: 2px solid rgba(0, 0, 0, 0.396);
+  border-radius: 2rem;
+  background-color: white;
+}
+
+/* ==========================================================================
+   DASHBOARD GRID LAYOUT
+   ========================================================================== */
+
+.dashboard-container {
+  width: 100%;
+  position: relative;
+  top: -40px;
+}
+
+.dashboard-title {
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+/* Griglia fissa 2x2 che occupa tutto lo spazio disponibile */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  width: 100%;
+}
+
+/* La singola Card */
+.stat-card {
+  background-color: rgba(255, 255, 255, 0.81);
+  border: 1px solid #333;
+  border-radius: 1rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: row;
+  gap: 2em;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: scale(1);
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #b3b3b3;
+  font-weight: 500;
+  font-size: 2rem;
+}
+
+.stat-value {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
 }
 
 /* ==========================================================================

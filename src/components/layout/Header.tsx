@@ -1,14 +1,20 @@
 import { NavLink } from "react-router";
-import logo from "../../assets/react.svg";
+import { supabase } from "../../services/supabase";
 
 const Header = () => {
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("Errore durante il logout:", error.message);
+    }
+  };
+
   return (
     <header className="header">
-      <img src={logo} alt="Logo" className="logo" />
-
       <NavLink to="/" end className="nav-link">
         Home
       </NavLink>
+
       <NavLink to="/students" className="nav-link">
         Students
       </NavLink>
@@ -21,6 +27,11 @@ const Header = () => {
       <NavLink to="/teachers" className="nav-link">
         Teachers
       </NavLink>
+      <div>
+        <button type="button" onClick={handleLogout} className="logout-btn">
+          Logout
+        </button>
+      </div>
     </header>
   );
 };

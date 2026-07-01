@@ -78,8 +78,8 @@ const FormUpdateTeacher = ({
           </select>
         </label>
 
-        <button type="button" onClick={onClose}>
-          Close
+        <button type="button" onClick={onClose} className="cancel-btn">
+          Cancel
         </button>
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Salvataggio..." : "Confirm"}
@@ -94,6 +94,7 @@ const FormUpdateTeacher = ({
             onClose();
           }}
           disabled={isDeleting}
+          className="delete-btn"
         >
           {isDeleting ? "Deleting..." : "Delete"}
         </button>

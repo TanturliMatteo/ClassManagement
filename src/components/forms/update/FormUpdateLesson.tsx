@@ -116,8 +116,8 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
             marginTop: "0.5rem",
           }}
         >
-          <button type="button" onClick={onClose}>
-            Close
+          <button type="button" onClick={onClose} className="cancel-btn">
+            Cancel
           </button>
 
           <button type="button" onClick={handleConfirm} disabled={isPending}>
@@ -135,6 +135,7 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
               }
             }}
             disabled={isDeleting}
+            className="delete-btn"
           >
             {isDeleting ? "Deleting..." : "Delete"}
           </button>

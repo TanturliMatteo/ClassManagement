@@ -88,8 +88,8 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
           />
         </label>
 
-        <button type="button" onClick={onClose}>
-          Close
+        <button type="button" onClick={onClose} className="cancel-btn">
+          Cancel
         </button>
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Salvataggio..." : "Confirm"}

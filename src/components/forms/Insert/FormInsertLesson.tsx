@@ -97,12 +97,12 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
             marginTop: "0.5rem",
           }}
         >
-          <button type="button" onClick={onClose}>
-            Close
+          <button type="button" onClick={onClose} className="cancel-btn">
+            Cancel
           </button>
 
           <button type="button" onClick={handleConfirm} disabled={isPending}>
-            {isPending ? "Creating......" : "Create"}
+            {isPending ? "Creating..." : "Confirm"}
           </button>
         </div>
       </div>

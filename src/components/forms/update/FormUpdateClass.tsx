@@ -92,12 +92,12 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
           </select>
         </label>
 
-        <button type="button" onClick={onClose}>
-          Close
+        <button type="button" onClick={onClose} className="cancel-btn">
+          Cancel
         </button>
 
         <button type="button" onClick={handleConfirm} disabled={isPending}>
-          {isPending ? "Updating..." : "Update"}
+          {isPending ? "Updating..." : "Confirm"}
         </button>
 
         <button
@@ -111,6 +111,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             }
           }}
           disabled={isDeleting}
+          className="delete-btn"
         >
           {isDeleting ? "Deleting..." : "Delete"}
         </button>
