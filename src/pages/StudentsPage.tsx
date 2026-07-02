@@ -1,13 +1,13 @@
 import type { StudentWithClass } from "../types";
 import { useState } from "react";
-import { useStudents } from "../hooks/useGetStudents";
+import { useGetStudents } from "../hooks/useGetStudents";
 import StudentsTable from "../components/ui/StudentsTable";
 import FormEditStudent from "../components/forms/update/FormUpdateStudent";
 import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertStudent from "../components/forms/insert/FormInsertStudent";
 
 export default function StudentsPage() {
-  const { data: students, isLoading, isError, error } = useStudents();
+  const { data: students, isLoading, isError, error } = useGetStudents();
   const [selectedStudent, setSelectedStudent] =
     useState<StudentWithClass | null>(null);
   const [searchTerm, setSearchTerm] = useState("");

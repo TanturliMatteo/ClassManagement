@@ -1,6 +1,6 @@
 import type { Lesson } from "../types/index";
 import { useState } from "react";
-import { useLessons } from "../hooks/useGetLessons";
+import { useGetLessons } from "../hooks/useGetLessons";
 import LessonsTable from "../components/ui/LessonsTable";
 import FormEditLesson from "../components/forms/update/FormUpdateLesson";
 import FormShowDescription from "../components/forms/update/FormShowDescription";
@@ -8,7 +8,7 @@ import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertLesson from "../components/forms/insert/FormInsertLesson";
 
 export default function LessonsPage() {
-  const { data: lessons, isLoading, isError, error } = useLessons();
+  const { data: lessons, isLoading, isError, error } = useGetLessons();
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [showDescription, setShowDescription] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");

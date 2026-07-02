@@ -7,7 +7,6 @@ interface FormInsertTeacherProps {
 
 const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
   const [name, setName] = useState<string | null>(null);
-  const [admin_access, setAdmin_access] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const { mutate, isPending } = useInsertTeacher();
 
@@ -15,7 +14,6 @@ const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
     const newTeacher = {
       name,
       email,
-      admin_access: false,
     };
     mutate(newTeacher, { onSuccess: () => onClose() });
   };
@@ -41,21 +39,6 @@ const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
-
-        <label>
-          Admin Privileges:
-          <select
-            value={admin_access ?? ""}
-            onChange={(e) => setAdmin_access(e.target.value)}
-            required
-          >
-            <option value="" disabled>
-              -- Select a class --
-            </option>
-            <option value="true">Sì</option>
-            <option value="false">No</option>
-          </select>
         </label>
 
         <button type="button" onClick={onClose} className="cancel-btn">

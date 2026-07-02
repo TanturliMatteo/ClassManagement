@@ -5,12 +5,24 @@ import TeachersTable from "../components/ui/TeachersTable";
 import FormUpdateTeacher from "../components/forms/update/FormUpdateTeacher";
 import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertTeacher from "../components/forms/insert/FormInsertTeacher";
+import { useOutletContext, Navigate } from "react-router";
+import type { User } from "@supabase/supabase-js";
+
+interface ContextType {
+  user: User;
+  isAdmin: boolean;
+}
 
 export default function TeachersPage() {
   const { data: teachers, isLoading, isError, error } = useGetTeachers();
   const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddingTeacher, setIsAddingTeacher] = useState(false);
+  const { isAdmin } = useOutletContext<ContextType>();
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />;
+  }
 
   if (isLoading) return <div>Caricamento in corso...</div>;
   if (isError) return <div>Errore: {error.message}</div>;

@@ -15,7 +15,6 @@ const TeachersTable = ({ teachers, onEditClick }: TeacherTableProps) => {
         <tr>
           <th>Name</th>
           <th>Email</th>
-          <th>Admin Privileges</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -24,7 +23,6 @@ const TeachersTable = ({ teachers, onEditClick }: TeacherTableProps) => {
           <tr key={t.id}>
             <td>{t.name}</td>
             <td>{t.email}</td>
-            <td>{t.admin_access ? "Sì" : "No"}</td>
             <td>
               <button onClick={() => onEditClick(t)}>Edit</button>
             </td>

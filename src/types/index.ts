@@ -45,6 +45,5 @@ export interface LessonWithClass extends Lesson {
 export interface Teacher {
   id: string;
   name: string | null;
-  admin_access: boolean;
   email: string | null;
 }
