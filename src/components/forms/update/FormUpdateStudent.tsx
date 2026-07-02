@@ -112,6 +112,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
         <button type="button" onClick={onClose} className="cancel-btn">
           Cancel
         </button>
+
         <button type="button" onClick={handleConfirm} disabled={isPending}>
           {isPending ? "Salvataggio..." : "Confirm"}
         </button>

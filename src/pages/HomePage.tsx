@@ -10,6 +10,7 @@ const HomePage = () => {
   const { data: teachers } = useGetTeachers();
   const { data: classes } = useGetClasses();
   const { data: lessons } = useGetLessons();
+  const todayStr = new Date().toLocaleDateString("sv-SE");
 
   const stats = [
     {
@@ -34,7 +35,8 @@ const HomePage = () => {
       label: "📅 Lezioni Oggi",
       value:
         lessons?.filter(
-          (l) => l.date === new Date().toISOString().split("T")[0],
+          (l) =>
+            l.date && new Date(l.date).toLocaleDateString("sv-SE") === todayStr,
         ).length ?? 0,
       path: "/lessons",
       color: "#ef4444",

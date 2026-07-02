@@ -16,11 +16,16 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
 
   const handleConfirm = () => {
+    const finalEnrollmentDate =
+      enrollment_date ||
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 10);
     const newStudent = {
       name,
       email,
       class_id,
-      enrollment_date,
+      enrollment_date: finalEnrollmentDate,
       end_date,
     };
     mutate(newStudent, { onSuccess: () => onClose() });
