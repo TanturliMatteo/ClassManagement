@@ -1,6 +1,7 @@
 import { useInsertLesson } from "../../../hooks/useInsertLesson";
 import { useState } from "react";
 import { useGetClasses } from "../../../hooks/useGetClasses";
+import { useGetTeachers } from "../../../hooks/useGetTeachers";
 
 interface FormInsertLessonProps {
   onClose: () => void;
@@ -10,16 +11,25 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
   const [title, setTitle] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [date, setDate] = useState<string | null>(null);
-  const [classId, setClassId] = useState<string | null>(null);
+  const [class_id, setClass_id] = useState<string | null>(null);
+  const [teacher_id, setTeacher_id] = useState<string | null>(null);
   const { mutate, isPending } = useInsertLesson();
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
+  const { data: teachers, isLoading: isLoadingTeachers } = useGetTeachers();
 
   const handleConfirm = () => {
+    const finalDate =
+      date ||
+      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
+
     const newLesson = {
       title,
       description,
-      date,
-      class_id: classId,
+      date: finalDate,
+      class_id,
+      teacher_id,
     };
     mutate(newLesson, { onSuccess: () => onClose() });
   };
@@ -49,7 +59,7 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
           <label>
             Date:
             <input
-              type="date"
+              type="datetime-local"
               value={date ?? ""}
               onChange={(e) => setDate(e.target.value)}
               required
@@ -59,8 +69,8 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
           <label>
             Class:
             <select
-              value={classId ?? ""}
-              onChange={(e) => setClassId(e.target.value)}
+              value={class_id ?? ""}
+              onChange={(e) => setClass_id(e.target.value)}
               disabled={isLoadingClasses}
               required
             >
@@ -75,6 +85,25 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
             </select>
           </label>
         </div>
+
+        <label>
+          Teacher:
+          <select
+            value={teacher_id ?? ""}
+            onChange={(e) => setTeacher_id(e.target.value)}
+            disabled={isLoadingTeachers}
+            required
+          >
+            <option value="" disabled>
+              -- Select a teacher --
+            </option>
+            {teachers?.map((teacher) => (
+              <option key={teacher.id} value={teacher.id}>
+                {teacher.name}
+              </option>
+            ))}
+          </select>
+        </label>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           <label>

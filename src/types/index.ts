@@ -34,10 +34,14 @@ export interface Lesson {
   description: string | null;
   date: string | null;
   class_id: string | null;
+  teacher_id: string | null;
 }
 
-export interface LessonWithClass extends Lesson {
+export interface LessonWithForeign extends Lesson {
   Classes: {
+    name: string;
+  } | null;
+  Teachers: {
     name: string;
   } | null;
 }

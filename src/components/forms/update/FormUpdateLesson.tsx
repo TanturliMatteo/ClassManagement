@@ -3,22 +3,37 @@ import { useState } from "react";
 import { useUpdateLesson } from "../../../hooks/useUpdateLessons";
 import { useGetClasses } from "../../../hooks/useGetClasses";
 import { useDeleteLesson } from "../../../hooks/useDeleteLesson";
+import { useGetTeachers } from "../../../hooks/useGetTeachers";
 
 interface FormEditLessonProps {
   lessonData: Lesson | null;
   onClose: () => void;
 }
 
+const formatDateForInput = (isoString: string | null | undefined): string => {
+  if (!isoString) return "";
+  const d = new Date(isoString);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+    .toISOString()
+    .slice(0, 16);
+};
+
 const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
   const [title, setTitle] = useState<string | null>(lessonData?.title || null);
-  const [date, setDate] = useState<string | null>(lessonData?.date || null);
+  const [date, setDate] = useState<string | null>(
+    formatDateForInput(lessonData?.date) || null,
+  );
   const [description, setDescription] = useState<string | null>(
     lessonData?.description || null,
   );
-  const [classId, setClassId] = useState<string | null>(
+  const [class_id, setClass_id] = useState<string | null>(
     lessonData?.class_id || null,
   );
+  const [teacher_id, setTeacher_id] = useState<string | null>(
+    lessonData?.teacher_id || null,
+  );
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
+  const { data: teachers, isLoading: isLoadingTeachers } = useGetTeachers();
   const { mutate: deleteLesson, isPending: isDeleting } = useDeleteLesson();
   const { mutate, isPending } = useUpdateLesson();
 
@@ -27,10 +42,11 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
 
   const handleConfirm = () => {
     const dataToUpdate = {
-      title: title,
-      date: date,
-      description: description,
-      class_id: classId,
+      title,
+      date,
+      description,
+      class_id,
+      teacher_id,
     };
 
     mutate(
@@ -68,7 +84,7 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
           <label>
             Date:
             <input
-              type="date"
+              type="datetime-local"
               value={date ?? ""}
               onChange={(e) => setDate(e.target.value)}
               required
@@ -78,8 +94,8 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
           <label>
             Class:
             <select
-              value={classId ?? ""}
-              onChange={(e) => setClassId(e.target.value)}
+              value={class_id ?? ""}
+              onChange={(e) => setClass_id(e.target.value)}
               disabled={isLoadingClasses}
               required
             >
@@ -94,6 +110,25 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
             </select>
           </label>
         </div>
+
+        <label>
+          Teacher:
+          <select
+            value={teacher_id ?? ""}
+            onChange={(e) => setTeacher_id(e.target.value)}
+            disabled={isLoadingTeachers}
+            required
+          >
+            <option value="" disabled>
+              -- Select a teacher --
+            </option>
+            {teachers?.map((teacher) => (
+              <option key={teacher.id} value={teacher.id}>
+                {teacher.name}
+              </option>
+            ))}
+          </select>
+        </label>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           <label>

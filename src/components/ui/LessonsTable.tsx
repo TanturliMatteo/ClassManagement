@@ -1,10 +1,10 @@
-import type { LessonWithClass } from "../../types/index";
-import toDateITA from "../../utils/toDateITA";
+import type { LessonWithForeign } from "../../types/index";
 import truncateWords from "../../utils/truncateWords";
+import toDateTimeITA from "../../utils/toDateTime.ITA";
 
 interface LessonsTableProps {
-  lessons: LessonWithClass[] | undefined;
-  onEditClick: (lesson: LessonWithClass) => void;
+  lessons: LessonWithForeign[] | undefined;
+  onEditClick: (lesson: LessonWithForeign) => void;
   onDescriptionClick: (description: string) => void;
 }
 
@@ -16,6 +16,7 @@ const LessonsTable = ({
   if (!lessons || lessons.length === 0)
     return <div>Nessuna lezione trovata.</div>;
 
+  console.log(lessons.map((l) => l.Teachers?.name));
   return (
     <table>
       <thead>
@@ -24,6 +25,7 @@ const LessonsTable = ({
           <th>Description</th>
           <th>Date</th>
           <th>Class</th>
+          <th>Teacher</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -37,11 +39,12 @@ const LessonsTable = ({
                 style={{ color: "black", background: "none" }}
                 className="table-td-max-width"
               >
-                {truncateWords(l.description ?? "", 6)}
+                {truncateWords(l.description ?? "", 3)}
               </button>
             </td>
-            <td>{toDateITA(l.date)}</td>
+            <td>{toDateTimeITA(l.date)}</td>
             <td>{l.Classes?.name}</td>
+            <td>{l.Teachers?.name}</td>
             <td>
               <button onClick={() => onEditClick(l)}>Edit</button>
             </td>
