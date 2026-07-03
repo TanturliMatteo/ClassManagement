@@ -24,7 +24,10 @@ export default function LessonsPage() {
         l.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         l.Classes?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         l.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        dataObj.toLocaleDateString("it-IT").includes(searchTerm.toLowerCase())
+        dataObj
+          .toLocaleDateString("it-IT")
+          .includes(searchTerm.toLowerCase()) ||
+        l.Teachers?.name?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }) || [];
 
