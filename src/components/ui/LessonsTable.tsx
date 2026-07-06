@@ -16,7 +16,6 @@ const LessonsTable = ({
   if (!lessons || lessons.length === 0)
     return <div>Nessuna lezione trovata.</div>;
 
-  console.log(lessons.map((l) => l.Teachers?.name));
   return (
     <table>
       <thead>

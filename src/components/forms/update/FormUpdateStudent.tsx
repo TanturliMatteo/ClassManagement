@@ -1,11 +1,11 @@
-import type { StudentWithClass } from "../../../types/index";
+import type { StudentWithForeign } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateStudent } from "../../../hooks/useUpdateStudent";
 import { useGetClasses } from "../../../hooks/useGetClasses";
 import { useDeleteStudent } from "../../../hooks/useDeleteStudent";
 
 interface FormEditStudentProps {
-  studentData: StudentWithClass | null;
+  studentData: StudentWithForeign | null;
   onClose: () => void;
 }
 

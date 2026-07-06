@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { StudentWithClass, Student } from "../types";
+import type { StudentWithForeign, Student } from "../types";
 
 export const createStudent = async (newStudent: Omit<Student, "id">) => {
   const { data, error } = await supabase
@@ -11,7 +11,7 @@ export const createStudent = async (newStudent: Omit<Student, "id">) => {
   return data;
 };
 
-export const getStudents = async (): Promise<StudentWithClass[]> => {
+export const getStudents = async (): Promise<StudentWithForeign[]> => {
   const { data, error } = await supabase
     .from("Students")
     .select("*,Classes(name)")
@@ -20,12 +20,12 @@ export const getStudents = async (): Promise<StudentWithClass[]> => {
   if (error) {
     throw new Error(error.message);
   }
-  return data as StudentWithClass[];
+  return data as StudentWithForeign[];
 };
 
 export const updateStudent = async (
   id: string,
-  updates: Partial<StudentWithClass>,
+  updates: Partial<StudentWithForeign>,
 ) => {
   const { data, error } = await supabase
     .from("Students")

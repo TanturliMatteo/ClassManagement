@@ -1,10 +1,10 @@
-import type { StudentWithClass } from "../../types/index";
+import type { StudentWithForeign } from "../../types/index";
 import toDateITA from "../../utils/toDateITA";
 import checkEndDate from "../../utils/checkEndDate";
 
 interface StudentTableProps {
-  students: StudentWithClass[] | undefined;
-  onEditClick: (student: StudentWithClass) => void;
+  students: StudentWithForeign[] | undefined;
+  onEditClick: (student: StudentWithForeign) => void;
 }
 
 const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {

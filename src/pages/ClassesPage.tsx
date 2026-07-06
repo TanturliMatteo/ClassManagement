@@ -25,6 +25,8 @@ const ClassesPage = () => {
         c.name?.toLowerCase().includes(search) ||
         c.level?.toLowerCase().includes(search) ||
         c.details?.toLowerCase().includes(search) ||
+        c.start_date?.toLowerCase().includes(search) ||
+        c.end_date?.toLowerCase().includes(search) ||
         c.Teachers?.name?.toLowerCase().includes(search)
       );
     }) || [];

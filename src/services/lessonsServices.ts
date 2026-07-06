@@ -4,7 +4,9 @@ import type { LessonWithForeign, Lesson } from "../types";
 export const createLesson = async (newLesson: Omit<Lesson, "id">) => {
   const { data, error } = await supabase
     .from("Lessons")
-    .insert(newLesson as Lesson);
+    .insert(newLesson as Lesson)
+    .select()
+    .single();
   if (error) {
     throw new Error(error.message);
   }

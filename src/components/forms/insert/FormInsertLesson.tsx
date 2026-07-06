@@ -2,12 +2,17 @@ import { useInsertLesson } from "../../../hooks/useInsertLesson";
 import { useState } from "react";
 import { useGetClasses } from "../../../hooks/useGetClasses";
 import { useGetTeachers } from "../../../hooks/useGetTeachers";
+import type { Lesson } from "../../../types";
 
 interface FormInsertLessonProps {
   onClose: () => void;
+  onLessonCreated: (classId: string, lessonId: string) => void;
 }
 
-const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
+const FormInsertLesson = ({
+  onClose,
+  onLessonCreated,
+}: FormInsertLessonProps) => {
   const [title, setTitle] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [date, setDate] = useState<string | null>(null);
@@ -48,7 +53,15 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
       class_id,
       teacher_id,
     };
-    mutate(newLesson, { onSuccess: () => onClose() });
+    mutate(newLesson, {
+      onSuccess: (createdLesson: Lesson) => {
+        if (class_id && createdLesson?.id) {
+          onLessonCreated(class_id, createdLesson.id);
+        }
+
+        onClose();
+      },
+    });
   };
 
   return (
@@ -143,7 +156,7 @@ const FormInsertLesson = ({ onClose }: FormInsertLessonProps) => {
             marginTop: "0.5rem",
           }}
         >
-          <button type="button" onClick={onClose} className="cancel-btn">
+          <button type="button" onClick={onClose}>
             Cancel
           </button>
 

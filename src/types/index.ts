@@ -9,10 +9,16 @@ export interface Student {
   payment: boolean | null;
 }
 
-export interface StudentWithClass extends Student {
+export interface StudentWithForeign extends Student {
   Classes: {
     name: string;
   } | null;
+}
+
+export interface Attendances {
+  lesson_id: string | null;
+  student_id: string | null;
+  is_present: boolean | null;
 }
 
 export interface Class {

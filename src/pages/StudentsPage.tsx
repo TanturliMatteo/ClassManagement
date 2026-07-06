@@ -1,4 +1,4 @@
-import type { StudentWithClass } from "../types";
+import type { StudentWithForeign } from "../types";
 import { useState } from "react";
 import { useGetStudents } from "../hooks/useGetStudents";
 import StudentsTable from "../components/ui/StudentsTable";
@@ -9,7 +9,7 @@ import FormInsertStudent from "../components/forms/insert/FormInsertStudent";
 export default function StudentsPage() {
   const { data: students, isLoading, isError, error } = useGetStudents();
   const [selectedStudent, setSelectedStudent] =
-    useState<StudentWithClass | null>(null);
+    useState<StudentWithForeign | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddingStudent, setIsAddingStudent] = useState(false);
 

@@ -6,6 +6,7 @@ import FormEditLesson from "../components/forms/update/FormUpdateLesson";
 import FormShowDescription from "../components/forms/update/FormShowDescription";
 import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertLesson from "../components/forms/insert/FormInsertLesson";
+import FormInsertAttendances from "../components/forms/insert/FormInsertAttendances"; // 🌟 Nuovo Import
 
 export default function LessonsPage() {
   const { data: lessons, isLoading, isError, error } = useGetLessons();
@@ -13,6 +14,10 @@ export default function LessonsPage() {
   const [showDescription, setShowDescription] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddingLesson, setIsAddingLesson] = useState(false);
+  const [activeAttendanceContext, setActiveAttendanceContext] = useState<{
+    classId: string;
+    lessonId: string;
+  } | null>(null);
 
   if (isLoading) return <div>Caricamento in corso...</div>;
   if (isError) return <div>Errore: {error.message}</div>;
@@ -38,6 +43,7 @@ export default function LessonsPage() {
         onSearchChange={setSearchTerm}
         onAddClick={() => setIsAddingLesson(true)}
       />
+
       <LessonsTable
         lessons={filteredLessons}
         onEditClick={(lesson) => setSelectedLesson(lesson)}
@@ -57,8 +63,22 @@ export default function LessonsPage() {
           onClose={() => setShowDescription(null)}
         />
       )}
+
       {isAddingLesson && (
-        <FormInsertLesson onClose={() => setIsAddingLesson(false)} />
+        <FormInsertLesson
+          onClose={() => setIsAddingLesson(false)}
+          onLessonCreated={(classId, lessonId) => {
+            setActiveAttendanceContext({ classId, lessonId });
+          }}
+        />
+      )}
+
+      {activeAttendanceContext && (
+        <FormInsertAttendances
+          classId={activeAttendanceContext.classId}
+          lessonId={activeAttendanceContext.lessonId}
+          onClose={() => setActiveAttendanceContext(null)}
+        />
       )}
     </>
   );
