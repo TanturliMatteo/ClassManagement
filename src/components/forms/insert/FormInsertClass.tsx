@@ -11,11 +11,13 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
   const [level, setLevel] = useState("");
   const [details, setDetails] = useState("");
   const [teacher_id, setTeacherId] = useState<string | null>(null);
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
   const { mutate, isPending } = useInsertClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
   const handleConfirm = () => {
-    const newClass = { name, level, details, teacher_id };
+    const newClass = { name, level, details, teacher_id, start_date, end_date };
 
     mutate(newClass, {
       onSuccess: () => {
@@ -54,6 +56,25 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
             value={details}
             onChange={(e) => setDetails(e.target.value)}
             required
+          />
+        </label>
+
+        <label>
+          Start Date:
+          <input
+            type="date"
+            value={start_date}
+            onChange={(e) => setStartDate(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          End Date:
+          <input
+            type="date"
+            value={end_date}
+            onChange={(e) => setEndDate(e.target.value)}
           />
         </label>
 

@@ -1,4 +1,5 @@
 import type { Teacher } from "../../types/index";
+import { useGetLessons } from "../../hooks/useGetLessons";
 
 interface TeacherTableProps {
   teachers: Teacher[] | undefined;
@@ -6,6 +7,12 @@ interface TeacherTableProps {
 }
 
 const TeachersTable = ({ teachers, onEditClick }: TeacherTableProps) => {
+  const { data: lessons } = useGetLessons();
+  const getLessonCount = (teacherId: string) => {
+    if (!lessons) return 0;
+    return lessons.filter((lesson) => lesson.teacher_id === teacherId).length;
+  };
+
   if (!teachers || teachers.length === 0)
     return <div>Nessun insegnante trovato.</div>;
 
@@ -15,6 +22,7 @@ const TeachersTable = ({ teachers, onEditClick }: TeacherTableProps) => {
         <tr>
           <th>Name</th>
           <th>Email</th>
+          <th>Lessons</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -23,6 +31,8 @@ const TeachersTable = ({ teachers, onEditClick }: TeacherTableProps) => {
           <tr key={t.id}>
             <td>{t.name}</td>
             <td>{t.email}</td>
+            <td>{getLessonCount(t.id)}</td>
+
             <td>
               <button onClick={() => onEditClick(t)}>Edit</button>
             </td>

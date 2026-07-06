@@ -6,6 +6,7 @@ export interface Student {
   class_id: string | null;
   enrollment_date: string | null;
   end_date: string | null;
+  payment: boolean | null;
 }
 
 export interface StudentWithClass extends Student {
@@ -21,6 +22,8 @@ export interface Class {
   level: string | null;
   details: string | null;
   teacher_id: string | null;
+  start_date: string | null;
+  end_date: string | null;
 }
 
 export interface ClassWithTeacher extends Class {

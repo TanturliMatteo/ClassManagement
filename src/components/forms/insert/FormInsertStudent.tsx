@@ -12,8 +12,26 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
   const [enrollment_date, setEnrollmentDate] = useState<string | null>(null);
   const [end_date, setEndDate] = useState<string | null>(null);
   const [class_id, setClass_id] = useState<string | null>(null);
+  const [payment, setPayment] = useState<boolean | null>(null);
   const { mutate, isPending } = useInsertStudent();
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
+
+  type SingleClass = NonNullable<typeof classes>[number];
+
+  const latestClasses = Object.values(
+    (classes || []).reduce<Record<string, SingleClass>>((acc, cls) => {
+      const existing = acc[cls.name ?? ""];
+
+      if (
+        !existing ||
+        new Date(cls.start_date ?? "") > new Date(existing.start_date ?? "")
+      ) {
+        acc[cls.name ?? ""] = cls;
+      }
+
+      return acc;
+    }, {}),
+  );
 
   const handleConfirm = () => {
     const finalEnrollmentDate =
@@ -27,6 +45,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
       class_id,
       enrollment_date: finalEnrollmentDate,
       end_date,
+      payment,
     };
     mutate(newStudent, { onSuccess: () => onClose() });
   };
@@ -65,7 +84,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
             <option value="" disabled>
               -- Select a class --
             </option>
-            {classes?.map((cls) => (
+            {latestClasses?.map((cls) => (
               <option key={cls.id} value={cls.id}>
                 {cls.name}
               </option>
@@ -91,6 +110,21 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
             onChange={(e) => setEndDate(e.target.value)}
             required
           />
+        </label>
+
+        <label>
+          Payment:
+          <select
+            value={payment === null ? "" : payment ? "true" : "false"}
+            onChange={(e) => setPayment(e.target.value === "true")}
+            required
+          >
+            <option value="" disabled>
+              -- Select payment status --
+            </option>
+            <option value="true">Paid</option>
+            <option value="false">Not Paid</option>
+          </select>
         </label>
 
         <button type="button" onClick={onClose} className="cancel-btn">

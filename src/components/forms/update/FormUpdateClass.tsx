@@ -13,6 +13,8 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
   const [name, setName] = useState(classData?.name || "");
   const [level, setLevel] = useState(classData?.level || "");
   const [details, setDetails] = useState(classData?.details || "");
+  const [start_date, setStartDate] = useState(classData?.start_date || "");
+  const [end_date, setEndDate] = useState(classData?.end_date || "");
   const [teacher_id, setTeacherId] = useState<string | null>(
     classData?.teacher_id || null,
   );
@@ -28,6 +30,8 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
       level,
       details,
       teacher_id,
+      start_date,
+      end_date,
     };
 
     mutate(
@@ -74,6 +78,25 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
         </label>
 
         <label>
+          Start Date:
+          <input
+            type="date"
+            value={start_date}
+            onChange={(e) => setStartDate(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          End Date:
+          <input
+            type="date"
+            value={end_date}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </label>
+
+        <label>
           teacher:
           <select
             value={teacher_id ?? ""}
@@ -82,7 +105,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             required
           >
             <option value="" disabled>
-              -- Select a teacher --
+              Select a teacher
             </option>
             {teachersData?.map((t) => (
               <option key={t.id} value={t.id}>

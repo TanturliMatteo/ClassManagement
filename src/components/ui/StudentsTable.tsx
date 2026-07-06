@@ -20,6 +20,7 @@ const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
           <th>Class Name</th>
           <th>Subscription start</th>
           <th>Subscription end</th>
+          <th>Payment</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -33,11 +34,22 @@ const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
             <td
               style={
                 checkEndDate(s.end_date)
-                  ? { color: "red", fontWeight: "bold" }
+                  ? {
+                      color: "red",
+                      fontWeight: "bold",
+                      textDecoration: "line-through",
+                      textDecorationColor: "red",
+                      textDecorationThickness: "2px",
+                    }
                   : {}
               }
             >
               {toDateITA(s.end_date)}
+            </td>
+            <td
+              style={{ color: s.payment ? "green" : "red", fontWeight: "bold" }}
+            >
+              {s.payment ? "Paid" : "Not Paid"}
             </td>
             <td>
               <button onClick={() => onEditClick(s)}>Edit</button>
