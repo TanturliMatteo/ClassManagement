@@ -6,7 +6,8 @@ import FormEditLesson from "../components/forms/update/FormUpdateLesson";
 import FormShowDescription from "../components/forms/update/FormShowDescription";
 import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertLesson from "../components/forms/insert/FormInsertLesson";
-import FormInsertAttendances from "../components/forms/insert/FormInsertAttendances"; // 🌟 Nuovo Import
+import FormInsertAttendances from "../components/forms/insert/FormInsertAttendances";
+import FormUpdateAttendances from "../components/forms/update/formUpdateAttendances";
 
 export default function LessonsPage() {
   const { data: lessons, isLoading, isError, error } = useGetLessons();
@@ -17,6 +18,11 @@ export default function LessonsPage() {
   const [activeAttendanceContext, setActiveAttendanceContext] = useState<{
     classId: string;
     lessonId: string;
+  } | null>(null);
+  const [updateAttendanceMap, setUpdateAttendanceMap] = useState<{
+    classId: string;
+    lessonId: string;
+    readOnly: boolean;
   } | null>(null);
 
   if (isLoading) return <div>Caricamento in corso...</div>;
@@ -48,14 +54,14 @@ export default function LessonsPage() {
         lessons={filteredLessons}
         onEditClick={(lesson) => setSelectedLesson(lesson)}
         onDescriptionClick={(description) => setShowDescription(description)}
+        onAttendanceClick={(lesson) => {
+          setUpdateAttendanceMap({
+            classId: lesson.class_id ?? "",
+            lessonId: lesson.id,
+            readOnly: true,
+          });
+        }}
       />
-
-      {selectedLesson && (
-        <FormEditLesson
-          lessonData={selectedLesson}
-          onClose={() => setSelectedLesson(null)}
-        />
-      )}
 
       {showDescription && (
         <FormShowDescription
@@ -78,6 +84,29 @@ export default function LessonsPage() {
           classId={activeAttendanceContext.classId}
           lessonId={activeAttendanceContext.lessonId}
           onClose={() => setActiveAttendanceContext(null)}
+        />
+      )}
+
+      {selectedLesson && (
+        <FormEditLesson
+          lessonData={selectedLesson}
+          onClose={() => setSelectedLesson(null)}
+          onLessonUpdated={(classId, lessonId) => {
+            setUpdateAttendanceMap({
+              classId,
+              lessonId,
+              readOnly: false,
+            });
+          }}
+        />
+      )}
+
+      {updateAttendanceMap && (
+        <FormUpdateAttendances
+          classId={updateAttendanceMap.classId}
+          lessonId={updateAttendanceMap.lessonId}
+          readOnly={updateAttendanceMap.readOnly}
+          onClose={() => setUpdateAttendanceMap(null)}
         />
       )}
     </>

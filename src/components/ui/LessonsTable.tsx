@@ -6,15 +6,17 @@ interface LessonsTableProps {
   lessons: LessonWithForeign[] | undefined;
   onEditClick: (lesson: LessonWithForeign) => void;
   onDescriptionClick: (description: string) => void;
+  onAttendanceClick: (lesson: LessonWithForeign) => void;
 }
 
 const LessonsTable = ({
   lessons,
   onEditClick,
   onDescriptionClick,
+  onAttendanceClick,
 }: LessonsTableProps) => {
   if (!lessons || lessons.length === 0)
-    return <div>Nessuna lezione trovata.</div>;
+    return <div>Nessuna lezione trouvata.</div>;
 
   return (
     <table>
@@ -25,6 +27,7 @@ const LessonsTable = ({
           <th>Date</th>
           <th>Class</th>
           <th>Teacher</th>
+          <th>Attendance</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -45,6 +48,15 @@ const LessonsTable = ({
             <td>{l.Classes?.name}</td>
             <td>{l.Teachers?.name}</td>
             <td>
+              <button
+                onClick={() => onAttendanceClick(l)}
+                style={{ background: "lightgray", color: "black" }}
+              >
+                Show More
+              </button>
+            </td>
+            <td>
+              {" "}
               <button onClick={() => onEditClick(l)}>Edit</button>
             </td>
           </tr>

@@ -82,7 +82,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
             required
           >
             <option value="" disabled>
-              -- Select a class --
+              Select class
             </option>
             {latestClasses?.map((cls) => (
               <option key={cls.id} value={cls.id}>
@@ -120,7 +120,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
             required
           >
             <option value="" disabled>
-              -- Select payment status --
+              payment status
             </option>
             <option value="true">Paid</option>
             <option value="false">Not Paid</option>

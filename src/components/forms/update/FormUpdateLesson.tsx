@@ -8,6 +8,7 @@ import { useGetTeachers } from "../../../hooks/useGetTeachers";
 interface FormEditLessonProps {
   lessonData: Lesson | null;
   onClose: () => void;
+  onLessonUpdated?: (classId: string, lessonId: string) => void;
 }
 
 const formatDateForInput = (isoString: string | null | undefined): string => {
@@ -18,7 +19,11 @@ const formatDateForInput = (isoString: string | null | undefined): string => {
     .slice(0, 16);
 };
 
-const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
+const FormEditLesson = ({
+  lessonData,
+  onClose,
+  onLessonUpdated,
+}: FormEditLessonProps) => {
   const [title, setTitle] = useState<string | null>(lessonData?.title || null);
   const [date, setDate] = useState<string | null>(
     formatDateForInput(lessonData?.date) || null,
@@ -70,6 +75,8 @@ const FormEditLesson = ({ lessonData, onClose }: FormEditLessonProps) => {
       { id: lessonData.id, updates: dataToUpdate },
       {
         onSuccess: () => {
+          if (class_id && lessonData?.id)
+            onLessonUpdated?.(class_id, lessonData.id);
           onClose();
         },
       },
