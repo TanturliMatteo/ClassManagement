@@ -30,6 +30,7 @@ export interface Class {
   teacher_id: string | null;
   start_date: string | null;
   end_date: string | null;
+  is_active: boolean | null;
 }
 
 export interface ClassWithTeacher extends Class {

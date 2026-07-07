@@ -42,22 +42,7 @@ const FormEditLesson = ({
   const { mutate: deleteLesson, isPending: isDeleting } = useDeleteLesson();
   const { mutate, isPending } = useUpdateLesson();
 
-  type SingleClass = NonNullable<typeof classes>[number];
-
-  const latestClasses = Object.values(
-    (classes || []).reduce<Record<string, SingleClass>>((acc, cls) => {
-      const existing = acc[cls.name ?? ""];
-
-      if (
-        !existing ||
-        new Date(cls.start_date ?? "") > new Date(existing.start_date ?? "")
-      ) {
-        acc[cls.name ?? ""] = cls;
-      }
-
-      return acc;
-    }, {}),
-  );
+  const activeClasses = (classes || []).filter((cls) => cls.is_active);
 
   if (!lessonData)
     return <div className="modal-box">{"Student not found"}</div>;
@@ -126,7 +111,7 @@ const FormEditLesson = ({
               <option value="" disabled>
                 -- Select a class --
               </option>
-              {latestClasses?.map((cls) => (
+              {activeClasses?.map((cls) => (
                 <option key={cls.id} value={cls.id}>
                   {cls.name}
                 </option>

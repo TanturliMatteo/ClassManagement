@@ -17,7 +17,15 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
   const handleConfirm = () => {
-    const newClass = { name, level, details, teacher_id, start_date, end_date };
+    const newClass = {
+      name,
+      level,
+      details,
+      teacher_id,
+      start_date,
+      end_date,
+      is_active: true,
+    };
 
     mutate(newClass, {
       onSuccess: () => {

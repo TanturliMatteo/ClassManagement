@@ -11,6 +11,7 @@ const ClassesPage = () => {
   const [selectedClass, setSelectedClass] = useState<Class | null>(null);
   const [isInsertFormOpen, setIsInsertFormOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [takeOver, setTakeOver] = useState<boolean | null>(null);
 
   if (isLoading) return <div>Caricamento in corso...</div>;
   if (isError) return <div>Errore: {error.message}</div>;
@@ -41,12 +42,15 @@ const ClassesPage = () => {
       <ClassesTable
         classes={filteredClasses}
         onEditClick={(c) => setSelectedClass(c)}
-        onShowClick={(c) => console.log(c)}
       />
       {selectedClass && (
         <FormEditClass
           classData={selectedClass}
-          onClose={() => setSelectedClass(null)}
+          takeOver={takeOver}
+          onClose={() => {
+            setSelectedClass(null);
+            setTakeOver(false);
+          }}
         />
       )}
       {isInsertFormOpen && (

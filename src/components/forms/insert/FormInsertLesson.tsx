@@ -22,23 +22,6 @@ const FormInsertLesson = ({
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
   const { data: teachers, isLoading: isLoadingTeachers } = useGetTeachers();
 
-  type SingleClass = NonNullable<typeof classes>[number];
-
-  const latestClasses = Object.values(
-    (classes || []).reduce<Record<string, SingleClass>>((acc, cls) => {
-      const existing = acc[cls.name ?? ""];
-
-      if (
-        !existing ||
-        new Date(cls.start_date ?? "") > new Date(existing.start_date ?? "")
-      ) {
-        acc[cls.name ?? ""] = cls;
-      }
-
-      return acc;
-    }, {}),
-  );
-
   const handleConfirm = () => {
     const finalDate =
       date ||
@@ -63,6 +46,8 @@ const FormInsertLesson = ({
       },
     });
   };
+
+  const activeClasses = (classes || []).filter((cls) => cls.is_active);
 
   return (
     <div className="modal-overlay">
@@ -107,7 +92,7 @@ const FormInsertLesson = ({
               <option value="" disabled>
                 -- Select a class --
               </option>
-              {latestClasses?.map((cls) => (
+              {activeClasses?.map((cls) => (
                 <option key={cls.id} value={cls.id}>
                   {cls.name}
                 </option>

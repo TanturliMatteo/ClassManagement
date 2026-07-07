@@ -18,6 +18,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
   const [teacher_id, setTeacherId] = useState<string | null>(
     classData?.teacher_id || null,
   );
+  // const [is_active, setIsActive] = useState(classData?.is_active || false);
   const { mutate, isPending } = useUpdateClass();
   const { mutate: deleteClass, isPending: isDeleting } = useDeleteClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
@@ -32,6 +33,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
       teacher_id,
       start_date,
       end_date,
+      // is_active,
     };
 
     mutate(
@@ -97,7 +99,7 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
         </label>
 
         <label>
-          teacher:
+          Teacher:
           <select
             value={teacher_id ?? ""}
             onChange={(e) => setTeacherId(e.target.value || null)}

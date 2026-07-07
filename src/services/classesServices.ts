@@ -1,6 +1,17 @@
 import { supabase } from "./supabase";
 import type { ClassWithTeacher, Class } from "../types";
 
+export const getClasses = async (): Promise<ClassWithTeacher[]> => {
+  const { data, error } = await supabase
+    .from("Classes")
+    .select("*,Teachers(name)")
+    .order("level", { ascending: true });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data as ClassWithTeacher[];
+};
+
 export const createClass = async (
   newClass: Omit<Class, "id" | "created_at">,
 ) => {
@@ -11,17 +22,6 @@ export const createClass = async (
     throw new Error(error.message);
   }
   return data;
-};
-
-export const getClasses = async (): Promise<ClassWithTeacher[]> => {
-  const { data, error } = await supabase
-    .from("Classes")
-    .select("*,Teachers(name)")
-    .order("level", { ascending: true });
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data as ClassWithTeacher[];
 };
 
 export const updateClass = async (
