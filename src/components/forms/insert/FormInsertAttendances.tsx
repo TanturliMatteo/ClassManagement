@@ -13,7 +13,6 @@ const FormInsertAttendances = ({
   lessonId,
   onClose,
 }: FormInsertAttendancesProps) => {
-  // Stato locale per tracciare chi è presente/assente: { [studentId]: boolean }
   const [attendanceMap, setAttendanceMap] = useState<Record<string, boolean>>(
     {},
   );
@@ -21,7 +20,6 @@ const FormInsertAttendances = ({
   const { data: students, isLoading } = useGetStudents();
   const { mutate: insertAttendance } = useInsertAttendance();
 
-  // Filtriamo al volo solo gli studenti che appartengono a questa classe
   const filteredStudents = (students || []).filter(
     (student) => student.class_id === classId,
   );
@@ -32,9 +30,7 @@ const FormInsertAttendances = ({
       return;
     }
 
-    // Inviamo le presenze al database per ogni studente
     filteredStudents.forEach((student) => {
-      // Se non è ancora presente nella mappa (l'utente non ha toccato il check), assume true (presente)
       const isPresent = attendanceMap[student.id] ?? true;
 
       insertAttendance({
@@ -43,9 +39,6 @@ const FormInsertAttendances = ({
         is_present: isPresent,
       });
     });
-
-    // ponytail: Eseguiamo N chiamate HTTP in parallelo. Funziona senza problemi per classi normali,
-    // ma se noti rallentamenti l'upgrade path è riscrivere useInsertAttendance per fare un bulk insert (.insert([...])).
     onClose();
   };
 
@@ -62,8 +55,6 @@ const FormInsertAttendances = ({
           overflowY: "auto",
         }}
       >
-        <h3 style={{ marginBottom: "1rem" }}>Take Attendance</h3>
-
         {isLoading ? (
           <p>Loading students...</p>
         ) : filteredStudents.length === 0 ? (
@@ -71,33 +62,20 @@ const FormInsertAttendances = ({
             No students found in this class.
           </p>
         ) : (
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              marginBottom: "1.5rem",
-            }}
-          >
+          <table>
             <thead>
-              <tr style={{ borderBottom: "2px solid #eee", textAlign: "left" }}>
-                <th style={{ padding: "8px" }}>Student Name</th>
-                <th
-                  style={{ padding: "8px", textWrap: "nowrap", width: "100px" }}
-                >
-                  Present
-                </th>
+              <tr>
+                <th>Student Name</th>
+                <th>Present</th>
               </tr>
             </thead>
             <tbody>
               {filteredStudents.map((student) => {
                 const isPresent = attendanceMap[student.id] ?? true;
                 return (
-                  <tr
-                    key={student.id}
-                    style={{ borderBottom: "1px solid #eee" }}
-                  >
-                    <td style={{ padding: "8px" }}>{student.name}</td>
-                    <td style={{ padding: "8px" }}>
+                  <tr key={student.id}>
+                    <td>{student.name}</td>
+                    <td>
                       <input
                         type="checkbox"
                         checked={isPresent}
@@ -107,11 +85,6 @@ const FormInsertAttendances = ({
                             [student.id]: e.target.checked,
                           }))
                         }
-                        style={{
-                          width: "18px",
-                          height: "18px",
-                          cursor: "pointer",
-                        }}
                       />
                     </td>
                   </tr>
@@ -129,8 +102,6 @@ const FormInsertAttendances = ({
             marginTop: "auto",
           }}
         >
-          {/* Essendo uno step vincolato alla creazione della lezione, 
-              il "Cancel" qui chiude semplicemente il registro delle presenze */}
           <button type="button" onClick={onClose}>
             Skip / Close
           </button>

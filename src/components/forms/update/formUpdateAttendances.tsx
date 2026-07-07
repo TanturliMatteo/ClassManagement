@@ -76,8 +76,6 @@ const FormUpdateAttendances = ({
           overflowY: "auto",
         }}
       >
-        <h3 style={{ marginBottom: "1rem" }}>Edit Attendance</h3>
-
         {isLoading ? (
           <p>Loading register data...</p>
         ) : filteredStudents.length === 0 ? (
@@ -85,21 +83,11 @@ const FormUpdateAttendances = ({
             No students found in this class.
           </p>
         ) : (
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              marginBottom: "1.5rem",
-            }}
-          >
+          <table>
             <thead>
-              <tr style={{ borderBottom: "2px solid #eee", textAlign: "left" }}>
-                <th style={{ padding: "8px" }}>Student Name</th>
-                <th
-                  style={{ padding: "8px", textWrap: "nowrap", width: "100px" }}
-                >
-                  Present
-                </th>
+              <tr>
+                <th>Student Name</th>
+                <th>Present</th>
               </tr>
             </thead>
             <tbody>
