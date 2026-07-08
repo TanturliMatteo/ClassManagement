@@ -17,7 +17,7 @@ export const getLessons = async (): Promise<LessonWithForeign[]> => {
   const { data, error } = await supabase
     .from("Lessons")
     .select("*,Classes(name),Teachers(name)")
-    .order("date", { ascending: true });
+    .order("date", { ascending: false });
 
   if (error) {
     throw new Error(error.message);

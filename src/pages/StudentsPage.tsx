@@ -29,6 +29,10 @@ export default function StudentsPage() {
           .includes(searchTerm.toLowerCase()) ||
         dataObjEnd
           .toLocaleDateString("it-IT")
+          .includes(searchTerm.toLowerCase()) ||
+        (s.payment ? "done" : "missed")
+          .toString()
+          .toLowerCase()
           .includes(searchTerm.toLowerCase())
       );
     }) || [];

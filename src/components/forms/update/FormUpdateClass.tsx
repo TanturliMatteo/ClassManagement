@@ -3,25 +3,40 @@ import { useState } from "react";
 import { useUpdateClass } from "../../../hooks/useUpdateClass";
 import { useGetTeachers } from "../../../hooks/useGetTeachers";
 import { useDeleteClass } from "../../../hooks/useDeleteClass";
+import { useTakeoverClass } from "../../../hooks/useTakeOverClass";
 
 interface FormEditClassProps {
   classData: Class | null;
+  takeOver?: boolean | null;
   onClose: () => void;
 }
 
-const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
+const FormEditClass = ({
+  classData,
+  takeOver,
+  onClose,
+}: FormEditClassProps) => {
   const [name, setName] = useState(classData?.name || "");
   const [level, setLevel] = useState(classData?.level || "");
   const [details, setDetails] = useState(classData?.details || "");
-  const [start_date, setStartDate] = useState(classData?.start_date || "");
-  const [end_date, setEndDate] = useState(classData?.end_date || "");
-  const [teacher_id, setTeacherId] = useState<string | null>(
-    classData?.teacher_id || null,
+
+  const [start_date, setStartDate] = useState(
+    takeOver ? classData?.end_date || "" : classData?.start_date || "",
   );
-  // const [is_active, setIsActive] = useState(classData?.is_active || false);
-  const { mutate, isPending } = useUpdateClass();
+  const [end_date, setEndDate] = useState(
+    takeOver ? "" : classData?.end_date || "",
+  );
+
+  const [teacher_id, setTeacherId] = useState<string | null>(
+    takeOver ? null : classData?.teacher_id || null,
+  );
+  const [isActive, setIsActive] = useState(classData?.is_active || false);
+
+  const { mutate: updateClass, isPending } = useUpdateClass();
   const { mutate: deleteClass, isPending: isDeleting } = useDeleteClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
+  const { mutate: mutateTakeOver, isPending: isTakingOver } =
+    useTakeoverClass();
 
   if (!classData) return <div className="modal-box">{"Class not found"}</div>;
 
@@ -33,16 +48,23 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
       teacher_id,
       start_date,
       end_date,
-      // is_active,
+      is_active: isActive,
     };
-
-    mutate(
+    updateClass(
       { id: classData.id, updates: dataToUpdate },
+      { onSuccess: () => onClose() },
+    );
+  };
+
+  const handleTakeOver = () => {
+    mutateTakeOver(
       {
-        onSuccess: () => {
-          onClose();
-        },
+        id_vecchia_classe: classData.id,
+        id_nuovo_prof: teacher_id || "",
+        nuovo_inizio: start_date,
+        nuovo_fine: end_date,
       },
+      { onSuccess: () => onClose() },
     );
   };
 
@@ -56,6 +78,8 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
+            readOnly={!!takeOver}
+            className={takeOver ? "readonly" : ""}
           />
         </label>
 
@@ -66,6 +90,8 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             value={level}
             onChange={(e) => setLevel(e.target.value)}
             required
+            readOnly={!!takeOver}
+            className={takeOver ? "readonly" : ""}
           />
         </label>
 
@@ -76,6 +102,8 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
             value={details}
             onChange={(e) => setDetails(e.target.value)}
             required
+            readOnly={!!takeOver}
+            className={takeOver ? "readonly" : ""}
           />
         </label>
 
@@ -117,29 +145,46 @@ const FormEditClass = ({ classData, onClose }: FormEditClassProps) => {
           </select>
         </label>
 
+        <label>
+          Is Active:
+          <select
+            value={isActive ? "yes" : "no"}
+            onChange={(e) => setIsActive(e.target.value === "yes")}
+          >
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </label>
+
         <button type="button" onClick={onClose} className="cancel-btn">
           Cancel
         </button>
 
-        <button type="button" onClick={handleConfirm} disabled={isPending}>
-          {isPending ? "Updating..." : "Confirm"}
-        </button>
-
         <button
           type="button"
-          onClick={() => {
-            if (classData) {
-              deleteClass(classData.id);
-            }
-            {
-              onClose();
-            }
-          }}
-          disabled={isDeleting}
-          className="delete-btn"
+          onClick={takeOver ? handleTakeOver : handleConfirm}
+          disabled={isPending || isTakingOver}
         >
-          {isDeleting ? "Deleting..." : "Delete"}
+          {takeOver && isTakingOver
+            ? "Taking Over..."
+            : isPending
+              ? "Updating..."
+              : "Confirm"}
         </button>
+
+        {!takeOver && (
+          <button
+            type="button"
+            onClick={() => {
+              if (classData) deleteClass(classData.id);
+              onClose();
+            }}
+            disabled={isDeleting}
+            className="delete-btn"
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </button>
+        )}
       </div>
     </div>
   );

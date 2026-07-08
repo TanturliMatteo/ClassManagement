@@ -5,7 +5,7 @@ export const getClasses = async (): Promise<ClassWithTeacher[]> => {
   const { data, error } = await supabase
     .from("Classes")
     .select("*,Teachers(name)")
-    .order("level", { ascending: true });
+    .order("end_date  ", { ascending: false });
   if (error) {
     throw new Error(error.message);
   }

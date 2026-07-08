@@ -65,7 +65,7 @@ const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
             <td
               style={{ color: s.payment ? "green" : "red", fontWeight: "bold" }}
             >
-              {s.payment ? "Paid" : "Not Paid"}
+              {s.payment ? "Done" : "Missed"}
             </td>
             <td>
               <button onClick={() => onEditClick(s)}>Edit</button>
