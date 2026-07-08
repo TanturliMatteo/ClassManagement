@@ -41,6 +41,11 @@ const FormUpdateAttendances = ({
     return acc;
   }, {});
 
+  // 🌟 Capiamo se per questa lezione è già stato preso l'appello in passato
+  const isAttendanceAlreadyTaken = (existingAttendances || []).length > 0;
+  // Se l'appello è già stato fatto, i nuovi studenti sono "Assenti" di default, altrimenti "Presenti"
+  const defaultFallback = isAttendanceAlreadyTaken ? false : true;
+
   const handleSubmit = () => {
     if (filteredStudents.length === 0) {
       onClose();
@@ -48,8 +53,11 @@ const FormUpdateAttendances = ({
     }
 
     const attendancesPayload = filteredStudents.map((student) => {
+      // 🔄 Sostituito il true fisso con il nostro fallback dinamico
       const isPresent =
-        attendanceMap[student.id] ?? dbAttendanceMap[student.id] ?? true;
+        attendanceMap[student.id] ??
+        dbAttendanceMap[student.id] ??
+        defaultFallback;
 
       return {
         lesson_id: lessonId,
@@ -59,7 +67,6 @@ const FormUpdateAttendances = ({
     });
 
     updateAttendance(attendancesPayload);
-
     onClose();
   };
 
@@ -92,10 +99,11 @@ const FormUpdateAttendances = ({
             </thead>
             <tbody>
               {filteredStudents.map((student) => {
+                // 🔄 Sostituito anche qui per la visualizzazione a schermo
                 const isPresent =
                   attendanceMap[student.id] ??
                   dbAttendanceMap[student.id] ??
-                  true;
+                  defaultFallback;
 
                 return (
                   <tr
