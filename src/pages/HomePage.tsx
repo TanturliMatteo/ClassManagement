@@ -55,7 +55,6 @@ const HomePage = () => {
             style={{ borderTop: `4px solid ${stat.color}` }}
           >
             <span className="stat-label">{stat.label}</span>
-            {/* 🌟 Coloriamo anche il numero per dare un richiamo visivo forte */}
             <span className="stat-value" style={{ color: stat.color }}>
               {stat.value}
             </span>

@@ -1,5 +1,5 @@
 const toDateTimeITA = (isoString: string | null | undefined): string => {
-  if (!isoString) return "Non definita"; // Ponytail: Gestisce i campi vuoti evitando crash.
+  if (!isoString) return "Non definita";
 
   return new Date(isoString).toLocaleString("it-IT", {
     day: "2-digit",
