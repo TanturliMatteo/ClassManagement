@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useUpdateClass } from "../../../hooks/useUpdateClass";
 import { useGetTeachers } from "../../../hooks/useGetTeachers";
 import { useDeleteClass } from "../../../hooks/useDeleteClass";
-import { useTakeoverClass } from "../../../hooks/useTakeOverClass";
+import { useTakeOverClass } from "../../../hooks/useTakeOverClass";
 
 interface FormEditClassProps {
   classData: Class | null;
@@ -36,7 +36,7 @@ const FormEditClass = ({
   const { mutate: deleteClass, isPending: isDeleting } = useDeleteClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
   const { mutate: mutateTakeOver, isPending: isTakingOver } =
-    useTakeoverClass();
+    useTakeOverClass();
 
   if (!classData) return <div className="modal-box">{"Class not found"}</div>;
 

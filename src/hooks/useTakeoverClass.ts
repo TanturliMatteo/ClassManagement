@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { takeoverClass } from "../services/takeOverServices";
 
-export const useTakeoverClass = () => {
+export const useTakeOverClass = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
