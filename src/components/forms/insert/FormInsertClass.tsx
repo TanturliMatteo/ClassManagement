@@ -20,10 +20,10 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
     const newClass = {
       name,
       level,
-      details,
+      details: details || null,
       teacher_id,
-      start_date,
-      end_date,
+      start_date: start_date || null,
+      end_date: end_date || null,
       is_active: true,
     };
 

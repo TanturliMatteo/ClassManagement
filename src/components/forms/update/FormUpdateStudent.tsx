@@ -84,13 +84,14 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           Class:
           <select
             value={class_id ?? ""}
-            onChange={(e) => setClass_id(e.target.value)}
+            onChange={(e) => setClass_id(e.target.value || null)}
             disabled={isLoadingClasses}
             required
           >
             <option value="" disabled>
               -- Select a class --
             </option>
+            <option value="">None</option>
             {activeClasses?.map((cls) => (
               <option key={cls.id} value={cls.id}>
                 {cls.name}
