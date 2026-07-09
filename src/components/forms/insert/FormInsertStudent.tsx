@@ -8,11 +8,12 @@ interface FormInsertStudentProps {
 
 const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState<string | null>(null);
-  const [enrollment_date, setEnrollmentDate] = useState<string | null>(null);
-  const [end_date, setEndDate] = useState<string | null>(null);
-  const [class_id, setClass_id] = useState<string | null>(null);
-  const [payment, setPayment] = useState<boolean | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [enrollment_date, setEnrollmentDate] = useState<string>("");
+  const [end_date, setEndDate] = useState<string>("");
+  const [class_id, setClass_id] = useState<string>("");
+  const [payment, setPayment] = useState<boolean>(false);
+
   const { mutate, isPending } = useInsertStudent();
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
 
@@ -31,9 +32,9 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
     const newStudent = {
       name,
       email,
-      class_id,
+      class_id: class_id || null,
       enrollment_date: finalEnrollmentDate,
-      end_date,
+      end_date: end_date || null,
       payment,
     };
     mutate(newStudent, { onSuccess: () => onClose() });
@@ -42,86 +43,97 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
   return (
     <div className="modal-overlay">
       <div className="modal-box ">
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
+        <div className="column">
+          <div className="row">
+            <label>
+              Name:
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </label>
 
-        <label>
-          Email:
-          <input
-            type="text"
-            value={email ?? ""}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
+            <label>
+              Email:
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
 
-        <label>
-          Class:
-          <select
-            value={class_id ?? ""}
-            onChange={(e) => setClass_id(e.target.value)}
-            disabled={isLoadingClasses}
-            required
+            <label>
+              Class:
+              <select
+                value={class_id}
+                onChange={(e) => setClass_id(e.target.value)}
+                disabled={isLoadingClasses}
+              >
+                <option value="" disabled>
+                  Select class
+                </option>
+                {activeClasses?.map((cls) => (
+                  <option key={cls.id} value={cls.id}>
+                    {cls.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              Enrollment Date:
+              <input
+                type="date"
+                value={enrollment_date}
+                onChange={(e) => setEnrollmentDate(e.target.value)}
+                required
+              />
+            </label>
+
+            <label>
+              End Date:
+              <input
+                type="date"
+                value={end_date}
+                onChange={(e) => setEndDate(e.target.value)}
+                required
+              />
+            </label>
+
+            <label>
+              Payment:
+              <select
+                value={payment === null ? "" : payment ? "true" : "false"}
+                onChange={(e) => setPayment(e.target.value === "true")}
+                required
+              >
+                <option value="" disabled>
+                  payment status
+                </option>
+                <option value="true">Paid</option>
+                <option value="false">Not Paid</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div className="row">
+          <button type="button" onClick={onClose} className="cancel-btn min">
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={isPending}
+            className="min"
           >
-            <option value="" disabled>
-              Select class
-            </option>
-            {activeClasses?.map((cls) => (
-              <option key={cls.id} value={cls.id}>
-                {cls.name}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          Enrollment Date:
-          <input
-            type="date"
-            value={enrollment_date ?? ""}
-            onChange={(e) => setEnrollmentDate(e.target.value)}
-            required
-          />
-        </label>
-
-        <label>
-          End Date:
-          <input
-            type="date"
-            value={end_date ?? ""}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-          />
-        </label>
-
-        <label>
-          Payment:
-          <select
-            value={payment === null ? "" : payment ? "true" : "false"}
-            onChange={(e) => setPayment(e.target.value === "true")}
-            required
-          >
-            <option value="" disabled>
-              payment status
-            </option>
-            <option value="true">Paid</option>
-            <option value="false">Not Paid</option>
-          </select>
-        </label>
-
-        <button type="button" onClick={onClose} className="cancel-btn">
-          Cancel
-        </button>
-        <button type="button" onClick={handleConfirm} disabled={isPending}>
-          {isPending ? "Salvataggio..." : "Confirm"}
-        </button>
+            {isPending ? "Salvataggio..." : "Confirm"}
+          </button>
+        </div>
       </div>
     </div>
   );

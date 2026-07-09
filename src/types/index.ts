@@ -1,63 +1,63 @@
 export interface Student {
   id: string;
-  created_at: string | null;
-  name: string | null;
-  email: string | null;
+  created_at: string;
+  name: string;
+  email: string;
   class_id: string | null;
-  enrollment_date: string | null;
+  enrollment_date: string;
   end_date: string | null;
-  payment: boolean | null;
+  payment: boolean;
 }
 
 export interface StudentWithForeign extends Student {
   Classes: {
     name: string;
-  } | null;
+  };
 }
 
 export interface Attendances {
-  lesson_id: string | null;
-  student_id: string | null;
-  is_present: boolean | null;
+  lesson_id: string;
+  student_id: string;
+  is_present: boolean;
 }
 
 export interface Class {
   id: string;
-  created_at: string | null;
-  name: string | null;
-  level: string | null;
+  created_at: string;
+  name: string;
+  level: string;
   details: string | null;
-  teacher_id: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  is_active: boolean | null;
+  teacher_id: string;
+  start_date: string;
+  end_date: string;
+  is_active: boolean;
 }
 
 export interface ClassWithTeacher extends Class {
-  Teachers: { name: string } | null;
+  Teachers: { name: string };
 }
 
 export interface Lesson {
   id: string;
-  created_at: string | null;
-  title: string | null;
+  created_at: string;
+  title: string;
   description: string | null;
-  date: string | null;
-  class_id: string | null;
-  teacher_id: string | null;
+  date: string;
+  class_id: string;
+  teacher_id: string;
 }
 
 export interface LessonWithForeign extends Lesson {
   Classes: {
     name: string;
-  } | null;
+  };
   Teachers: {
     name: string;
-  } | null;
+  };
 }
 
 export interface Teacher {
   id: string;
-  name: string | null;
-  email: string | null;
+  name: string;
+  email: string;
 }

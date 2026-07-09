@@ -8,9 +8,19 @@ interface TeacherTableProps {
 
 const TeachersTable = ({ teachers, onEditClick }: TeacherTableProps) => {
   const { data: lessons } = useGetLessons();
-  const getLessonCount = (teacherId: string) => {
+  const getLessonCountMonthly = (teacherId: string): number => {
     if (!lessons) return 0;
-    return lessons.filter((lesson) => lesson.teacher_id === teacherId).length;
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    return lessons.filter((lesson) => {
+      const lessonDate = new Date(lesson.date);
+      return (
+        lesson.teacher_id === teacherId &&
+        lessonDate.getMonth() === currentMonth &&
+        lessonDate.getFullYear() === currentYear
+      );
+    }).length;
   };
 
   if (!teachers || teachers.length === 0)
@@ -31,7 +41,7 @@ const TeachersTable = ({ teachers, onEditClick }: TeacherTableProps) => {
           <tr key={t.id}>
             <td>{t.name}</td>
             <td>{t.email}</td>
-            <td>{getLessonCount(t.id)}</td>
+            <td>{getLessonCountMonthly(t.id)}</td>
 
             <td>
               <button onClick={() => onEditClick(t)}>Edit</button>

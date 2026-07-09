@@ -10,9 +10,10 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
   const [name, setName] = useState("");
   const [level, setLevel] = useState("");
   const [details, setDetails] = useState("");
-  const [teacher_id, setTeacherId] = useState<string | null>(null);
+  const [teacher_id, setTeacherId] = useState<string>("");
   const [start_date, setStartDate] = useState("");
   const [end_date, setEndDate] = useState("");
+
   const { mutate, isPending } = useInsertClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
 
@@ -22,8 +23,8 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
       level,
       details: details || null,
       teacher_id,
-      start_date: start_date || null,
-      end_date: end_date || null,
+      start_date,
+      end_date,
       is_active: true,
     };
 
@@ -37,81 +38,91 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
   return (
     <div className="modal-overlay">
       <div className="modal-box">
-        <label>
-          Name:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
+        <div className="column">
+          <div className="row">
+            <label>
+              Name:
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </label>
 
-        <label>
-          Level:
-          <input
-            type="text"
-            value={level}
-            onChange={(e) => setLevel(e.target.value)}
-            required
-          />
-        </label>
+            <label>
+              Level:
+              <input
+                type="text"
+                value={level}
+                onChange={(e) => setLevel(e.target.value)}
+                required
+              />
+            </label>
 
-        <label>
-          Details:
-          <input
-            type="text"
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
-            required
-          />
-        </label>
+            <label>
+              Details:
+              <input
+                type="text"
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
+              />
+            </label>
 
-        <label>
-          Start Date:
-          <input
-            type="date"
-            value={start_date}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-          />
-        </label>
+            <label>
+              Start Date:
+              <input
+                type="date"
+                value={start_date}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </label>
 
-        <label>
-          End Date:
-          <input
-            type="date"
-            value={end_date}
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </label>
+            <label>
+              End Date:
+              <input
+                type="date"
+                value={end_date}
+                onChange={(e) => setEndDate(e.target.value)}
+              />
+            </label>
 
-        <label>
-          teacher:
-          <select
-            value={teacher_id ?? ""}
-            onChange={(e) => setTeacherId(e.target.value || null)}
-            disabled={isLoadingTeachers}
-            required
+            <label>
+              teacher:
+              <select
+                value={teacher_id}
+                onChange={(e) => setTeacherId(e.target.value)}
+                disabled={isLoadingTeachers}
+                required
+              >
+                <option value="" disabled>
+                  Select a teacher
+                </option>
+                {teachersData?.map((teacher) => (
+                  <option key={teacher.id} value={teacher.id}>
+                    {teacher.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div className="row">
+          <button type="button" onClick={onClose} className="cancel-btn min">
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={isPending}
+            className="min"
           >
-            <option value="" disabled>
-              -- Select a teacher --
-            </option>
-            {teachersData?.map((teacher) => (
-              <option key={teacher.id} value={teacher.id}>
-                {teacher.name}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <button type="button" onClick={onClose} className="cancel-btn">
-          Cancel
-        </button>
-
-        <button type="button" onClick={handleConfirm} disabled={isPending}>
-          {isPending ? "Creating..." : "Confirm"}
-        </button>
+            {isPending ? "Creating..." : "Confirm"}
+          </button>
+        </div>
       </div>
     </div>
   );
