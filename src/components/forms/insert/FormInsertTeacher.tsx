@@ -46,10 +46,15 @@ const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
         </div>
 
         <div className="row">
-          <button type="button" onClick={onClose} className="cancel-btn">
+          <button type="button" onClick={onClose} className="cancel-btn min">
             Cancel
           </button>
-          <button type="button" onClick={handleConfirm} disabled={isPending}>
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={isPending}
+            className="min"
+          >
             {isPending ? "Salvataggio..." : "Confirm"}
           </button>
         </div>
