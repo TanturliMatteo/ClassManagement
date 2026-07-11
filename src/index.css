@@ -413,6 +413,17 @@ a {
     width: 100%;
   }
 
+  .stats-grid {
+    display: flex;
+    flex-direction: column;
+    margin-top: 3rem;
+    gap: 2rem;
+  }
+
+  .logo {
+    display: none;
+  }
+
   table {
     font-size: 1rem;
     min-width: 200px;

@@ -18,21 +18,22 @@ const HomePage = () => {
       value: students?.length ?? 0,
       path: "/students",
       color: "#3b82f6",
+      className: "stat-card-label",
     },
     {
-      label: "🏫 Classi Attive",
+      label: "🏫 Active Classes",
       value: classes?.length ?? 0,
       path: "/classes",
       color: "#10b981",
     },
     {
-      label: "👨‍🏫 Insegnanti",
+      label: "👨‍🏫 Teachers",
       value: teachers?.length ?? 0,
       path: "/teachers",
       color: "#f59e0b",
     },
     {
-      label: "📅 Lezioni Oggi",
+      label: "📅 Today Lessons",
       value:
         lessons?.filter(
           (l) =>
