@@ -32,6 +32,8 @@ const FormEditClass = ({
   );
   const [isActive, setIsActive] = useState(classData.is_active || false);
 
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
   const { mutate: updateClass, isPending } = useUpdateClass();
   const { mutate: deleteClass, isPending: isDeleting } = useDeleteClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
@@ -67,6 +69,47 @@ const FormEditClass = ({
       { onSuccess: () => onClose() },
     );
   };
+
+  if (showDeleteConfirm) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-box">
+          <div
+            className="column"
+            style={{
+              textAlign: "center",
+              marginBottom: "2rem",
+              marginTop: "1rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            Sei sicuro? L'eliminazione della classe comporta la rimozione di
+            tutte le lezioni associate.
+          </div>
+          <div className="row">
+            <button
+              type="button"
+              onClick={() => setShowDeleteConfirm(false)}
+              className="cancel-btn min"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (classData) deleteClass(classData.id);
+                onClose();
+              }}
+              disabled={isDeleting}
+              className="delete-btn min"
+            >
+              {isDeleting ? "Deleting..." : "Confirm"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="modal-overlay">
@@ -182,14 +225,11 @@ const FormEditClass = ({
             {!takeOver && (
               <button
                 type="button"
-                onClick={() => {
-                  if (classData) deleteClass(classData.id);
-                  onClose();
-                }}
+                onClick={() => setShowDeleteConfirm(true)}
                 disabled={isDeleting}
                 className="delete-btn min"
               >
-                {isDeleting ? "Deleting..." : "Delete"}
+                Delete
               </button>
             )}
           </div>

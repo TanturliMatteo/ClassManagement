@@ -85,6 +85,7 @@ const FormInsertAttendances = ({
                             [student.id]: e.target.checked,
                           }))
                         }
+                        style={{ width: "20px", height: "20px" }}
                       />
                     </td>
                   </tr>
