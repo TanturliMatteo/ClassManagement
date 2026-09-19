@@ -34,6 +34,10 @@ const FormEditClass = ({
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  const [num_student, setNumStudent] = useState<string>(
+    classData.num_student ? classData.num_student.toString() : "",
+  );
+
   const { mutate: updateClass, isPending } = useUpdateClass();
   const { mutate: deleteClass, isPending: isDeleting } = useDeleteClass();
   const { data: teachersData, isLoading: isLoadingTeachers } = useGetTeachers();
@@ -50,6 +54,7 @@ const FormEditClass = ({
       teacher_id,
       start_date,
       end_date,
+      num_student: num_student || null,
       is_active: isActive,
     };
     updateClass(
@@ -142,11 +147,22 @@ const FormEditClass = ({
               </label>
 
               <label>
-                Details:
+                Book:
                 <input
                   type="text"
                   value={details}
                   onChange={(e) => setDetails(e.target.value)}
+                  readOnly={!!takeOver}
+                  className={takeOver ? "readonly" : ""}
+                />
+              </label>
+
+              <label>
+                N° Students:
+                <input
+                  type="text"
+                  value={num_student}
+                  onChange={(e) => setNumStudent(e.target.value)}
                   readOnly={!!takeOver}
                   className={takeOver ? "readonly" : ""}
                 />
@@ -209,6 +225,17 @@ const FormEditClass = ({
               Cancel
             </button>
 
+            {!takeOver && (
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirm(true)}
+                disabled={isDeleting}
+                className="delete-btn min"
+              >
+                Delete
+              </button>
+            )}
+
             <button
               type="button"
               onClick={takeOver ? handleTakeOver : handleConfirm}
@@ -221,17 +248,6 @@ const FormEditClass = ({
                   ? "Updating..."
                   : "Confirm"}
             </button>
-
-            {!takeOver && (
-              <button
-                type="button"
-                onClick={() => setShowDeleteConfirm(true)}
-                disabled={isDeleting}
-                className="delete-btn min"
-              >
-                Delete
-              </button>
-            )}
           </div>
         </div>
       </div>

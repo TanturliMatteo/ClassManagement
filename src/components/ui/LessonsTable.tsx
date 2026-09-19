@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { LessonWithForeign } from "../../types/index";
 import truncateWords from "../../utils/truncateWords";
 import toDateTimeITA from "../../utils/toDateTime.ITA";
@@ -9,30 +10,89 @@ interface LessonsTableProps {
   onAttendanceClick: (lesson: LessonWithForeign) => void;
 }
 
+type SortField = "title" | "date" | "className" | "teacher";
+
 const LessonsTable = ({
   lessons,
   onEditClick,
   onDescriptionClick,
   onAttendanceClick,
 }: LessonsTableProps) => {
+  const [sortField, setSortField] = useState<SortField | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
   if (!lessons || lessons.length === 0)
-    return <div>Nessuna lezione trouvata.</div>;
+    return <div>Nessuna lezione trovata.</div>;
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+  };
+
+  const renderSortIcon = (field: SortField) => {
+    if (sortField !== field) return "↕";
+    return sortOrder === "asc" ? "▲" : "▼";
+  };
+
+  const sortedLessons = [...lessons].sort((a, b) => {
+    if (!sortField) return 0;
+
+    let comparison = 0;
+
+    if (sortField === "title") {
+      comparison = (a.title ?? "")
+        .toLowerCase()
+        .localeCompare((b.title ?? "").toLowerCase());
+    } else if (sortField === "date") {
+      const timeA = a.date ? new Date(a.date).getTime() : 0;
+      const timeB = b.date ? new Date(b.date).getTime() : 0;
+      comparison = timeA - timeB;
+    } else if (sortField === "className") {
+      comparison = (a.Classes?.name ?? "")
+        .toLowerCase()
+        .localeCompare((b.Classes?.name ?? "").toLowerCase());
+    } else if (sortField === "teacher") {
+      comparison = (a.Teachers?.name ?? "")
+        .toLowerCase()
+        .localeCompare((b.Teachers?.name ?? "").toLowerCase());
+    }
+
+    return sortOrder === "asc" ? comparison : -comparison;
+  });
+
+  const headerStyle = {
+    cursor: "pointer",
+    userSelect: "none" as const,
+    whiteSpace: "nowrap" as const,
+  };
 
   return (
     <table>
       <thead>
         <tr>
-          <th>Title</th>
+          <th onClick={() => handleSort("title")} style={headerStyle}>
+            Title {renderSortIcon("title")}
+          </th>
           <th>Description</th>
-          <th>Date</th>
-          <th>Class</th>
-          <th>Teacher</th>
+          <th onClick={() => handleSort("date")} style={headerStyle}>
+            Date {renderSortIcon("date")}
+          </th>
+          <th onClick={() => handleSort("className")} style={headerStyle}>
+            Class {renderSortIcon("className")}
+          </th>
+          <th onClick={() => handleSort("teacher")} style={headerStyle}>
+            Teacher {renderSortIcon("teacher")}
+          </th>
           <th>Attendance</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {lessons?.map((l) => (
+        {sortedLessons.map((l) => (
           <tr key={l.id}>
             <td className="table-td-max-width">{l.title}</td>
             <td>
@@ -56,7 +116,6 @@ const LessonsTable = ({
               </button>
             </td>
             <td>
-              {" "}
               <button onClick={() => onEditClick(l)}>Edit</button>
             </td>
           </tr>

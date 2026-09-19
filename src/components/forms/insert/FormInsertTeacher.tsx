@@ -21,43 +21,40 @@ const FormInsertTeacher = ({ onClose }: FormInsertTeacherProps) => {
   return (
     <div className="modal-overlay">
       <div className="modal-box ">
-        <div className="column">
-          <div className="row">
-            <label>
-              Name:
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
-            </label>
+        <form onSubmit={handleConfirm}>
+          <div className="column">
+            <div className="row">
+              <label>
+                Name:
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </label>
 
-            <label>
-              Email:
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </label>
+              <label>
+                Email:
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </label>
+            </div>
           </div>
-        </div>
 
-        <div className="row">
-          <button type="button" onClick={onClose} className="cancel-btn min">
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={handleConfirm}
-            disabled={isPending}
-            className="min"
-          >
-            {isPending ? "Salvataggio..." : "Confirm"}
-          </button>
-        </div>
+          <div className="row">
+            <button type="button" onClick={onClose} className="cancel-btn min">
+              Cancel
+            </button>
+            <button type="submit" disabled={isPending} className="min">
+              {isPending ? "Salvataggio..." : "Confirm"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

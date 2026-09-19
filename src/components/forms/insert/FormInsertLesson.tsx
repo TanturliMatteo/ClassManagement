@@ -77,7 +77,6 @@ const FormInsertLesson = ({
                 value={class_id}
                 onChange={(e) => setClass_id(e.target.value)}
                 disabled={isLoadingClasses}
-                required
               >
                 <option value="" disabled>
                   Select a class
@@ -93,7 +92,6 @@ const FormInsertLesson = ({
                 value={teacher_id}
                 onChange={(e) => setTeacher_id(e.target.value)}
                 disabled={isLoadingTeachers}
-                required
               >
                 <option value="" disabled>
                   Select a teacher

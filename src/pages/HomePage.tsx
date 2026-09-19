@@ -14,23 +14,17 @@ const HomePage = () => {
 
   const stats = [
     {
-      label: "🎓 Totale Studenti",
-      value: students?.length ?? 0,
-      path: "/students",
-      color: "#3b82f6",
-      className: "stat-card-label",
-    },
-    {
       label: "🏫 Active Classes",
       value: classes?.length ?? 0,
       path: "/classes",
       color: "#10b981",
     },
     {
-      label: "👨‍🏫 Teachers",
-      value: teachers?.length ?? 0,
-      path: "/teachers",
-      color: "#f59e0b",
+      label: "🎓 Totale Studenti",
+      value: students?.length ?? 0,
+      path: "/students",
+      color: "#3b82f6",
+      className: "stat-card-label",
     },
     {
       label: "📅 Today Lessons",
@@ -41,6 +35,12 @@ const HomePage = () => {
         ).length ?? 0,
       path: "/lessons",
       color: "#ef4444",
+    },
+    {
+      label: "👨‍🏫 Teachers",
+      value: teachers?.length ?? 0,
+      path: "/teachers",
+      color: "#f59e0b",
     },
   ];
 

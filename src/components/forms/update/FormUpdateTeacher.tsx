@@ -71,15 +71,6 @@ const FormUpdateTeacher = ({
 
           <button
             type="button"
-            onClick={handleConfirm}
-            disabled={isPending}
-            className="min"
-          >
-            {isPending ? "Salvataggio..." : "Confirm"}
-          </button>
-
-          <button
-            type="button"
             onClick={() => {
               if (teacherData) {
                 deleteTeacher(teacherData.id);
@@ -90,6 +81,15 @@ const FormUpdateTeacher = ({
             className="delete-btn min"
           >
             {isDeleting ? "Deleting..." : "Delete"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleConfirm}
+            disabled={isPending}
+            className="min"
+          >
+            {isPending ? "Salvataggio..." : "Confirm"}
           </button>
         </div>
       </div>

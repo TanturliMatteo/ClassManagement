@@ -14,9 +14,7 @@ export const createStudent = async (newStudent: Omit<Student, "id">) => {
 export const getStudents = async (): Promise<StudentWithForeign[]> => {
   const { data, error } = await supabase
     .from("Students")
-    .select("*,Classes(name)")
-    .order("name", { ascending: true });
-
+    .select("*,Classes(name)");
   if (error) {
     throw new Error(error.message);
   }

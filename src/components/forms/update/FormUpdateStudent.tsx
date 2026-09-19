@@ -18,6 +18,11 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
   );
   const [end_date, setEnd_date] = useState<string>(studentData.end_date || "");
   const [payment, setPayment] = useState<boolean>(studentData.payment || false);
+  const [birth_date, setBirthdate] = useState<string>(
+    studentData.birth_date || "",
+  );
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
   const { mutate: deleteStudent, isPending: isDeleting } = useDeleteStudent();
@@ -40,6 +45,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
       enrollment_date,
       end_date: end_date === "" ? null : end_date,
       payment,
+      birth_date: birth_date === "" ? null : birth_date,
     };
 
     mutate(
@@ -52,9 +58,50 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
     );
   };
 
+  if (showDeleteConfirm) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-box">
+          <div
+            className="column"
+            style={{
+              textAlign: "center",
+              marginBottom: "2rem",
+              marginTop: "1rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            Sei sicuro? L'eliminazione dello studente comporta la rimozione di
+            tutti i dati associati.
+          </div>
+          <div className="row">
+            <button
+              type="button"
+              onClick={() => setShowDeleteConfirm(false)}
+              className="cancel-btn min"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (studentData) deleteStudent(studentData.id);
+                onClose();
+              }}
+              disabled={isDeleting}
+              className="delete-btn min"
+            >
+              {isDeleting ? "Deleting..." : "Confirm"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="modal-overlay">
-      <div className="modal-box ">
+      <div className="modal-box">
         <div className="column">
           <div className="row">
             <label>
@@ -84,16 +131,22 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
                 onChange={(e) => setClass_id(e.target.value)}
                 disabled={isLoadingClasses}
               >
-                <option value="" disabled>
-                  Select a class
-                </option>
-                <option value="">None</option>
+                <option value="">Nessuna classe</option>
                 {activeClasses?.map((cls) => (
                   <option key={cls.id} value={cls.id}>
                     {cls.name}
                   </option>
                 ))}
               </select>
+            </label>
+
+            <label>
+              Birth Date:
+              <input
+                type="date"
+                value={birth_date}
+                onChange={(e) => setBirthdate(e.target.value)}
+              />
             </label>
 
             <label>
@@ -118,13 +171,10 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
             <label>
               Payment:
               <select
-                value={payment?.toString()}
+                value={payment.toString()}
                 onChange={(e) => setPayment(e.target.value === "true")}
                 required
               >
-                <option value="" disabled>
-                  Select status
-                </option>
                 <option value="true">Paid</option>
                 <option value="false">Not Paid</option>
               </select>
@@ -139,25 +189,20 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
 
           <button
             type="button"
+            onClick={() => setShowDeleteConfirm(true)}
+            disabled={isDeleting}
+            className="delete-btn min"
+          >
+            Delete
+          </button>
+
+          <button
+            type="button"
             onClick={handleConfirm}
             disabled={isPending}
             className="min"
           >
             {isPending ? "Salvataggio..." : "Confirm"}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              if (studentData) {
-                deleteStudent(studentData.id);
-              }
-              onClose();
-            }}
-            disabled={isDeleting}
-            className="delete-btn min"
-          >
-            {isDeleting ? "Deleting..." : "Delete"}
           </button>
         </div>
       </div>

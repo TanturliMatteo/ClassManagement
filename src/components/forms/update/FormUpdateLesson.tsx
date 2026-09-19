@@ -26,15 +26,18 @@ const FormEditLesson = ({
 }: FormEditLessonProps) => {
   const [title, setTitle] = useState<string>(lessonData?.title || "");
   const [date, setDate] = useState<string>(
-    formatDateForInput(lessonData.date) || "",
+    formatDateForInput(lessonData?.date) || "",
   );
   const [description, setDescription] = useState<string>(
-    lessonData.description || "",
+    lessonData?.description || "",
   );
-  const [class_id, setClass_id] = useState<string>(lessonData.class_id || "");
+  const [class_id, setClass_id] = useState<string>(lessonData?.class_id || "");
   const [teacher_id, setTeacher_id] = useState<string>(
-    lessonData.teacher_id || "",
+    lessonData?.teacher_id || "",
   );
+
+  // 🌟 Stato per la conferma eliminazione
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
   const { data: teachers, isLoading: isLoadingTeachers } = useGetTeachers();
@@ -43,10 +46,9 @@ const FormEditLesson = ({
 
   const activeClasses = (classes || []).filter((cls) => cls.is_active);
 
-  if (!lessonData)
-    return <div className="modal-box">{"Student not found"}</div>;
+  if (!lessonData) return <div className="modal-box">{"Lesson not found"}</div>;
 
-  const handleConfirm = (e: React.SubmitEvent<HTMLFormElement>) => {
+  const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const dataToUpdate = {
       title,
@@ -67,6 +69,47 @@ const FormEditLesson = ({
       },
     );
   };
+
+  if (showDeleteConfirm) {
+    return (
+      <div className="modal-overlay">
+        <div className="modal-box">
+          <div
+            className="column"
+            style={{
+              textAlign: "center",
+              marginBottom: "2rem",
+              marginTop: "1rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            Sei sicuro? L'eliminazione della lezione comporta la rimozione di
+            tutti i dati associati.
+          </div>
+          <div className="row">
+            <button
+              type="button"
+              onClick={() => setShowDeleteConfirm(false)}
+              className="cancel-btn min"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (lessonData) deleteLesson(lessonData.id);
+                onClose();
+              }}
+              disabled={isDeleting}
+              className="delete-btn min"
+            >
+              {isDeleting ? "Deleting..." : "Confirm"}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="modal-overlay">
@@ -136,24 +179,17 @@ const FormEditLesson = ({
               Cancel
             </button>
 
-            <button type="submit" disabled={isPending} className="min">
-              {isPending ? "Salvataggio..." : "Confirm"}
-            </button>
-
             <button
               type="button"
-              onClick={() => {
-                if (lessonData) {
-                  deleteLesson(lessonData.id);
-                }
-                {
-                  onClose();
-                }
-              }}
+              onClick={() => setShowDeleteConfirm(true)}
               disabled={isDeleting}
               className="delete-btn min"
             >
-              {isDeleting ? "Deleting..." : "Delete"}
+              Delete
+            </button>
+
+            <button type="submit" disabled={isPending} className="min">
+              {isPending ? "Salvataggio..." : "Confirm"}
             </button>
           </div>
         </form>
