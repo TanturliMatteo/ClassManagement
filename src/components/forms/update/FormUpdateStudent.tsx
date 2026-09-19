@@ -11,7 +11,7 @@ interface FormEditStudentProps {
 
 const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
   const [name, setName] = useState<string>(studentData.name);
-  const [email, setEmail] = useState<string>(studentData.email);
+  const [email, setEmail] = useState<string>(studentData.email || "");
   const [class_id, setClass_id] = useState<string>(studentData.class_id || "");
   const [enrollment_date, setEnrollment_date] = useState<string>(
     studentData.enrollment_date || "",
