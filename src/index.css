@@ -339,7 +339,7 @@ a {
 .dashboard-container {
   width: 100%;
   position: relative;
-  top: -40px;
+  top: 60px;
 }
 
 .dashboard-title {

@@ -29,7 +29,16 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="mainLayout">
+    <div
+      className="mainLayout"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "50%",
+      }}
+    >
       <form onSubmit={handleLogin} className="login-container">
         <h2>Accedi</h2>
 
