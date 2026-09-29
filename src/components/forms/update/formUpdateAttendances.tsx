@@ -137,10 +137,16 @@ const FormUpdateAttendances = ({
             display: "flex",
             justifyContent: "center",
             gap: "1rem",
-            marginTop: "auto",
+            marginTop: "1.5rem",
+            width: "100%",
           }}
         >
-          <button type="button" onClick={onClose}>
+          <button
+            type="button"
+            onClick={onClose}
+            className="cancel-btn"
+            style={{ flex: 1, margin: 0 }}
+          >
             Cancel
           </button>
 
@@ -149,6 +155,7 @@ const FormUpdateAttendances = ({
               type="button"
               onClick={handleSubmit}
               disabled={isLoading || filteredStudents.length === 0}
+              style={{ flex: 1, margin: 0 }}
             >
               Update Attendances
             </button>

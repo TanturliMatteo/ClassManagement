@@ -158,7 +158,6 @@ button {
   cursor: pointer;
   border-radius: 0.25rem;
   align-self: flex-end;
-  font-size: 1.15rem;
 }
 
 .min {
@@ -188,6 +187,7 @@ button.login-button {
   color: black;
   border-radius: 2rem;
   margin-left: 0;
+  font-size: 1.2rem;
 }
 
 .logout-btn:hover {
@@ -406,60 +406,144 @@ a {
   line-height: 1;
 }
 
+/* HAMBURGER DESKTOP (Nascosto) */
+.hamburger-btn {
+  display: none;
+}
+
+.header-mobile-bar {
+  display: flex;
+  align-items: center;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+}
+
 @media (max-width: 768px) {
-  /* 1. FIX HEADER STICKY MOBILE: Niente overflow orizzontale, compatto in cima */
+  /* 1. HEADER STICKY & HAMBURGER MOBILE */
   .header {
     position: sticky;
     top: 0.5rem;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    gap: 0.6rem;
-    padding: 0.8rem 1rem;
+    padding: 0.6rem 1.2rem;
     margin: 0.5rem auto;
+    gap: 0;
     width: 92%;
     box-sizing: border-box;
   }
 
-  .mainLayout {
-    width: 95%;
-    padding-top: 1rem;
+  .header-mobile-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
   }
 
-  /* 2. DASHBOARD & CARDS CENTRATE */
+  .hamburger-btn {
+    display: block;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    color: black;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+  }
+
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.15);
+  }
+
+  .nav-menu.open {
+    display: flex;
+  }
+
+  .nav-menu .nav-link {
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* 2. MAIN LAYOUT, DASHBOARD & LOGIN */
+  .mainLayout {
+    width: 95%;
+    padding-top: 0.5rem;
+  }
+
   .dashboard-container {
     width: 100%;
-    margin: 1rem auto;
-    gap: 1.5rem;
+    position: static;
+    margin: 0.5rem auto;
+  }
+
+  .dashboard-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    text-align: center;
   }
 
   .stats-grid {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 1rem;
-    gap: 1.2rem;
+    margin-top: 0.5rem;
+    gap: 1rem;
   }
 
   .stat-card {
-    padding: 1.2rem 1.5rem;
+    padding: 1rem 1.2rem;
+    gap: 1rem;
+  }
+
+  .stat-label {
+    font-size: 1.1rem;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .login-container {
+    width: 90%;
+    max-width: 400px;
+    padding: 1.5rem 1rem;
+    box-sizing: border-box;
+    margin: 1rem auto;
   }
 
   .logo {
     display: none;
   }
 
-  /* 3. TABELLE SCROLLABILI ORIZZONTALMENTE */
+  button {
+    font-size: 1rem;
+  }
+
+  /* 3. CONTROLLI TABELLA E DASHBOARDS */
   .table-dashboards {
     flex-direction: column;
-    align-items: stretch; /* Spinge i figli a occupare tutta la larghezza */
+    align-items: stretch;
     gap: 0.8rem;
     width: 100%;
   }
 
   .table-dashboards input,
   .table-dashboards button {
-    width: 100%; /* Si allungano entrambi a occupare l'intera riga */
+    width: 100%;
     box-sizing: border-box;
   }
 
@@ -471,20 +555,56 @@ a {
     white-space: nowrap;
   }
 
-  /* 4. MODALI MOBILE: Non escono dallo schermo verticalmente */
+  /* 4. MODALI E FORM PRESENZE (FIX SENZA CONFLITTI) */
+  .modal-overlay .modal-box,
   .modal-box {
     flex-direction: column;
-    width: 95%;
-    max-height: 85vh; /* Impedisce alla modale di uscire dallo schermo */
-    overflow-y: auto; /* Permette lo scroll interno se la tabella è lunga */
+    width: 95% !important; /* Vince sullo style inline width: 50% */
+    max-height: 85vh;
+    overflow-y: auto;
     padding: 1.2rem;
-    gap: 1.2rem;
+    gap: 1rem;
     box-sizing: border-box;
+  }
+
+  /* Ripristina la visualizzazione a griglia per la tabella dentro la modale presenze */
+  .modal-box table {
+    display: table;
+    width: 100%;
+    font-size: 0.95rem;
+    white-space: normal;
+  }
+
+  .modal-box th,
+  .modal-box td {
+    padding: 0.6rem 0.4rem;
+    text-align: left;
+  }
+
+  .modal-box td:last-child,
+  .modal-box th:last-child {
+    text-align: center;
+  }
+
+  /* Mantiene le dimensioni corrette dei checkbox senza farli allargare */
+  .modal-box input[type="checkbox"] {
+    width: 22px !important;
+    height: 22px !important;
+    margin: 0 auto;
+    display: block;
   }
 
   .modal-box button {
     width: 100%;
     align-self: center;
+  }
+
+  /* Incolla verticalmente i pulsanti Cancel e Update Attendances in fondo alla modale */
+  .modal-box > div:last-child {
+    flex-direction: column-reverse !important;
+    width: 100%;
+    gap: 0.5rem !important;
+    margin-top: 1rem !important;
   }
 
   .description-form-first-row,

@@ -32,11 +32,9 @@ const LoginPage = () => {
     <div
       className="mainLayout"
       style={{
-        display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
-        width: "50%",
+        minHeight: "80vh",
       }}
     >
       <form onSubmit={handleLogin} className="login-container">

@@ -46,10 +46,6 @@ export default function ModalStudentHistory({
       {/* Modale Principale Storico */}
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal-box ds" onClick={(e) => e.stopPropagation()}>
-          <h3 style={{ marginBottom: "1rem" }}>
-            Storico Lezioni: {student.name}
-          </h3>
-
           {loading ? (
             <div>Caricamento...</div>
           ) : history.length === 0 ? (
