@@ -107,7 +107,6 @@ const ClassesTable = ({
           <th onClick={() => handleSort("is_active")} style={headerStyle}>
             Is Active {renderSortIcon("is_active")}
           </th>
-
           <th>Actions</th>
         </tr>
       </thead>
@@ -125,7 +124,6 @@ const ClassesTable = ({
 
             <td>
               {" "}
-              <button onClick={() => onEditClick(c)}>Edit</button>
               {c.is_active && (
                 <button
                   onClick={() => {
@@ -141,6 +139,7 @@ const ClassesTable = ({
                   Take Over
                 </button>
               )}
+              <button onClick={() => onEditClick(c)}>Edit</button>
             </td>
           </tr>
         ))}

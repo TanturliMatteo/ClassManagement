@@ -42,6 +42,9 @@ body {
 }
 
 .header {
+  position: sticky;
+  top: 1rem;
+  z-index: 100;
   width: auto;
   height: auto;
   display: flex;
@@ -53,9 +56,14 @@ body {
   gap: 4rem;
   border: 2px solid black;
   border-radius: 2rem;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.484); /* Semi-trasparente */
+  backdrop-filter: blur(8px);
+  transition: background-color 0.2s ease;
 }
 
+.header:hover {
+  background-color: white; /* Torna pieno al passaggio del mouse */
+}
 .footer {
   width: 100%;
   height: auto;
@@ -166,12 +174,17 @@ button.description-button {
   background-color: #45a049;
 }
 
+button.description-button:hover {
+  width: 100%;
+  background-color: #3e8e41;
+}
+
 button.login-button {
   align-self: center;
 }
 
 .logout-btn {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0);
   color: black;
   border-radius: 2rem;
   margin-left: 0;
@@ -394,54 +407,79 @@ a {
 }
 
 @media (max-width: 768px) {
-  .mainLayout {
-    width: 95%;
-  }
-
+  /* 1. FIX HEADER STICKY MOBILE: Niente overflow orizzontale, compatto in cima */
   .header {
+    position: sticky;
+    top: 0.5rem;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.8rem;
-    padding: 1rem;
-    width: 100%;
+    gap: 0.6rem;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem auto;
+    width: 92%;
+    box-sizing: border-box;
   }
 
-  .table-dashboards {
-    flex-direction: row;
-    overflow-x: auto;
+  .mainLayout {
+    width: 95%;
+    padding-top: 1rem;
+  }
+
+  /* 2. DASHBOARD & CARDS CENTRATE */
+  .dashboard-container {
     width: 100%;
+    margin: 1rem auto;
+    gap: 1.5rem;
   }
 
   .stats-grid {
     display: flex;
     flex-direction: column;
-    margin-top: 3rem;
-    gap: 2rem;
+    width: 100%;
+    margin-top: 1rem;
+    gap: 1.2rem;
   }
 
-  .row {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  .stat-card {
+    padding: 1.2rem 1.5rem;
   }
+
   .logo {
     display: none;
   }
 
-  table {
-    font-size: 1rem;
-    min-width: 200px;
-    display: block;
-    overflow-x: auto;
+  /* 3. TABELLE SCROLLABILI ORIZZONTALMENTE */
+  .table-dashboards {
+    flex-direction: column;
+    align-items: stretch; /* Spinge i figli a occupare tutta la larghezza */
+    gap: 0.8rem;
+    width: 100%;
   }
 
+  .table-dashboards input,
+  .table-dashboards button {
+    width: 100%; /* Si allungano entrambi a occupare l'intera riga */
+    box-sizing: border-box;
+  }
+
+  table {
+    font-size: 0.9rem;
+    min-width: 100%;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  /* 4. MODALI MOBILE: Non escono dallo schermo verticalmente */
   .modal-box {
     flex-direction: column;
     width: 95%;
-    padding: 1.5rem;
-    gap: 1.5rem;
+    max-height: 85vh; /* Impedisce alla modale di uscire dallo schermo */
+    overflow-y: auto; /* Permette lo scroll interno se la tabella è lunga */
+    padding: 1.2rem;
+    gap: 1.2rem;
+    box-sizing: border-box;
   }
 
   .modal-box button {
@@ -449,8 +487,12 @@ a {
     align-self: center;
   }
 
-  .description-form-first-row {
+  .description-form-first-row,
+  .row {
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     gap: 1rem;
   }
 }

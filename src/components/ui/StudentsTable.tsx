@@ -7,11 +7,16 @@ import { useGetAttendances } from "../../hooks/useGetAttendances";
 interface StudentTableProps {
   students: StudentWithForeign[] | undefined;
   onEditClick: (student: StudentWithForeign) => void;
+  onAttendanceClick: (student: StudentWithForeign) => void;
 }
 
 type SortField = "name" | "className" | "birth_date";
 
-const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
+const StudentsTable = ({
+  students,
+  onEditClick,
+  onAttendanceClick,
+}: StudentTableProps) => {
   const [sortField, setSortField] = useState<SortField | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -115,7 +120,14 @@ const StudentsTable = ({ students, onEditClick }: StudentTableProps) => {
             <td>{s.name}</td>
             <td>{s.email}</td>
             <td>{s.Classes?.name || "Nessuna classe"}</td>
-            <td>
+            <td
+              onClick={() => onAttendanceClick(s)}
+              style={{
+                cursor: "pointer",
+                textDecoration: "none",
+                fontWeight: "bold",
+              }}
+            >
               {countAttendances(s.id) + "/" + totalStudentAttendances(s.id)}
             </td>
             <td>

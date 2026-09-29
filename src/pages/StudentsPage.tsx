@@ -5,6 +5,7 @@ import StudentsTable from "../components/ui/StudentsTable";
 import FormEditStudent from "../components/forms/update/FormUpdateStudent";
 import TableDashboards from "../components/layout/TableDashboards";
 import FormInsertStudent from "../components/forms/insert/FormInsertStudent";
+import ModalStudentHistory from "../components/ui/ModalStudentHistory";
 
 export default function StudentsPage() {
   const { data: students, isLoading, isError, error } = useGetStudents();
@@ -12,6 +13,8 @@ export default function StudentsPage() {
     useState<StudentWithForeign | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddingStudent, setIsAddingStudent] = useState(false);
+  const [historyStudent, setHistoryStudent] =
+    useState<StudentWithForeign | null>(null);
 
   if (isLoading) return <div>Caricamento in corso...</div>;
   if (isError) return <div>Errore: {error.message}</div>;
@@ -48,6 +51,7 @@ export default function StudentsPage() {
       <StudentsTable
         students={filteredStudents}
         onEditClick={(student) => setSelectedStudent(student)}
+        onAttendanceClick={(student) => setHistoryStudent(student)}
       />
       {selectedStudent && (
         <FormEditStudent
@@ -57,6 +61,12 @@ export default function StudentsPage() {
       )}
       {isAddingStudent && (
         <FormInsertStudent onClose={() => setIsAddingStudent(false)} />
+      )}
+      {historyStudent && (
+        <ModalStudentHistory
+          student={historyStudent}
+          onClose={() => setHistoryStudent(null)}
+        />
       )}
     </>
   );
