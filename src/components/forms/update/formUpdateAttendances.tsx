@@ -144,8 +144,8 @@ const FormUpdateAttendances = ({
           <button
             type="button"
             onClick={onClose}
-            className="cancel-btn"
             style={{ flex: 1, margin: 0 }}
+            className="cancel-btn"
           >
             Cancel
           </button>

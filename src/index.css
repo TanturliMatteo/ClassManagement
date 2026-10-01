@@ -41,22 +41,27 @@ body {
   justify-content: space-between;
 }
 
+.header-mobile-bar {
+  display: none; /* Nasconde del tutto il contenitore mobile su desktop */
+}
+
+.header-mobile-bar {
+  display: none; /* Nasconde del tutto il contenitore mobile su desktop */
+}
+
 .header {
   position: sticky;
   top: 1rem;
   z-index: 100;
   width: auto;
-  height: auto;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  padding: 1rem;
+  justify-content: center; /* Centra perfettamente il contenuto */
+  padding: 0.8rem 2rem;
   margin: 1rem;
-  gap: 4rem;
   border: 2px solid black;
   border-radius: 2rem;
-  background-color: rgba(255, 255, 255, 0.484); /* Semi-trasparente */
+  background-color: rgba(255, 255, 255, 0.484);
   backdrop-filter: blur(8px);
   transition: background-color 0.2s ease;
 }
