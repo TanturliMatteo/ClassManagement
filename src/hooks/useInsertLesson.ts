@@ -7,7 +7,7 @@ export const useInsertLesson = () => {
 
   return useMutation({
     mutationFn: (newLesson: Omit<Lesson, "id" | "created_at">) =>
-      createLesson(newLesson as Lesson),
+      createLesson(newLesson),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["lessons"] });
     },

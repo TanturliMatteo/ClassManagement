@@ -613,8 +613,10 @@ a {
     align-self: center;
   }
 
-  /* Incolla verticalmente i pulsanti Cancel e Update Attendances in fondo alla modale */
-  .modal-box > div:last-child {
+  /* Incolla verticalmente i pulsanti Cancel e Update Attendances in fondo alla modale.
+     :not(.column) evita di invertire i form il cui ultimo blocco è il contenitore
+     di tutti i campi (es. Edit Class), che altrimenti mostrerebbero i pulsanti in alto. */
+  .modal-box > div:last-child:not(.column) {
     flex-direction: column-reverse !important;
     width: 100%;
     gap: 0.5rem !important;

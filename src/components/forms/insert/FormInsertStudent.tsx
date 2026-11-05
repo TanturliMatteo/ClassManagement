@@ -9,7 +9,10 @@ interface FormInsertStudentProps {
 const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState<string>("");
-  const [enrollment_date, setEnrollmentDate] = useState<string>("");
+  // Precompilata con la data di oggi (giorno locale), modificabile.
+  const [enrollment_date, setEnrollmentDate] = useState<string>(() =>
+    new Date().toLocaleDateString("sv-SE"),
+  );
   const [end_date, setEndDate] = useState<string>("");
   const [class_id, setClass_id] = useState<string>("");
   const [payment, setPayment] = useState<boolean>(false);
@@ -26,18 +29,14 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
 
   const handleConfirm = (e: React.FormEvent) => {
     e.preventDefault();
-
-    const finalEnrollmentDate =
-      enrollment_date ||
-      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 10);
+    // Secondo controllo, indipendente dalla validazione del browser.
+    if (!name.trim() || !enrollment_date) return;
 
     const newStudent = {
-      name,
-      email: email || null,
+      name: name.trim(),
+      email: email.trim() || null,
       class_id: class_id || null,
-      enrollment_date: finalEnrollmentDate,
+      enrollment_date,
       end_date: end_date || null,
       birth_date: birth_date || null,
       payment,
@@ -59,6 +58,8 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  pattern=".*\S.*"
+                  title="Il campo non può essere vuoto"
                 />
               </label>
 
@@ -102,6 +103,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
                   type="date"
                   value={enrollment_date}
                   onChange={(e) => setEnrollmentDate(e.target.value)}
+                  required
                 />
               </label>
 
@@ -110,6 +112,7 @@ const FormInsertStudent = ({ onClose }: FormInsertStudentProps) => {
                 <input
                   type="date"
                   value={end_date}
+                  min={enrollment_date || undefined}
                   onChange={(e) => setEndDate(e.target.value)}
                 />
               </label>

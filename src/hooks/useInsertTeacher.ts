@@ -7,7 +7,7 @@ export const useInsertTeacher = () => {
 
   return useMutation({
     mutationFn: (newTeacher: Omit<Teacher, "id">) =>
-      createTeacher(newTeacher as Teacher),
+      createTeacher(newTeacher),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["teachers"] });
     },

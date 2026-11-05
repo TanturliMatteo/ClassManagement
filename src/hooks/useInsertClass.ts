@@ -7,7 +7,7 @@ export const useInsertClass = () => {
 
   return useMutation({
     mutationFn: (newClass: Omit<Class, "id" | "created_at">) =>
-      createClass(newClass as Class),
+      createClass(newClass),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["classes"] });
     },

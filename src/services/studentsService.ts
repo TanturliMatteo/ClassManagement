@@ -1,10 +1,12 @@
 import { supabase } from "./supabase";
 import type { StudentWithForeign, Student } from "../types";
 
-export const createStudent = async (newStudent: Omit<Student, "id">) => {
+export type NewStudent = Omit<Student, "id" | "created_at">;
+
+export const createStudent = async (newStudent: NewStudent) => {
   const { data, error } = await supabase
     .from("Students")
-    .insert(newStudent as Student);
+    .insert(newStudent);
   if (error) {
     throw new Error(error.message);
   }
@@ -23,7 +25,7 @@ export const getStudents = async (): Promise<StudentWithForeign[]> => {
 
 export const updateStudent = async (
   id: string,
-  updates: Partial<StudentWithForeign>,
+  updates: Partial<Student>,
 ) => {
   const { data, error } = await supabase
     .from("Students")

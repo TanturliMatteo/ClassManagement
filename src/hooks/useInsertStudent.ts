@@ -1,13 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createStudent } from "../services/studentsService";
-import type { Student } from "../types/index";
+import { createStudent, type NewStudent } from "../services/studentsService";
 
 export const useInsertStudent = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (newStudent: Omit<Student, "id" | "created_at">) =>
-      createStudent(newStudent as Student),
+    mutationFn: (newStudent: NewStudent) => createStudent(newStudent),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["students"] });
     },

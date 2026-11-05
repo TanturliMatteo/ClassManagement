@@ -37,11 +37,15 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
   if (!studentData)
     return <div className="modal-box">{"Student not found"}</div>;
 
-  const handleConfirm = () => {
+  const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Secondo controllo, indipendente dalla validazione del browser.
+    if (!name.trim() || !enrollment_date) return;
+
     const dataToUpdate = {
-      name,
+      name: name.trim(),
       class_id: class_id === "" ? null : class_id,
-      email,
+      email: email.trim() || null,
       enrollment_date,
       end_date: end_date === "" ? null : end_date,
       payment,
@@ -101,7 +105,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-box">
+      <form className="modal-box" onSubmit={handleConfirm}>
         <div className="column">
           <div className="row">
             <label>
@@ -111,16 +115,17 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                pattern=".*\S.*"
+                title="Il campo non può essere vuoto"
               />
             </label>
 
             <label>
               Email:
               <input
-                type="text"
+                type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </label>
 
@@ -164,6 +169,7 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
               <input
                 type="date"
                 value={end_date || ""}
+                min={enrollment_date || undefined}
                 onChange={(e) => setEnd_date(e.target.value)}
               />
             </label>
@@ -197,15 +203,14 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
           </button>
 
           <button
-            type="button"
-            onClick={handleConfirm}
+            type="submit"
             disabled={isPending}
             className="min"
           >
             {isPending ? "Salvataggio..." : "Confirm"}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

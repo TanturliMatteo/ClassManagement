@@ -67,11 +67,13 @@ const FormEditLesson = ({
   const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (hasAttendance && class_id !== lessonData.class_id) return;
+    // Secondo controllo, indipendente dalla validazione del browser.
+    if (!title.trim() || !date || !class_id || !teacher_id) return;
 
     const dataToUpdate = {
-      title,
+      title: title.trim(),
       date,
-      description: description || null,
+      description: description.trim() || null,
       class_id,
       teacher_id,
     };
@@ -141,6 +143,8 @@ const FormEditLesson = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                pattern=".*\S.*"
+                title="Il campo non può essere vuoto"
               />
 
               <input

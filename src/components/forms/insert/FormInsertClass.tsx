@@ -19,15 +19,17 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
 
   const handleConfirm = (e: React.FormEvent) => {
     e.preventDefault(); // 🌟 Evita il reload della pagina
+    // Secondo controllo, indipendente dalla validazione del browser.
+    if (!name.trim()) return;
 
     const newClass = {
-      name,
-      level: level || null,
-      details: details || null,
+      name: name.trim(),
+      level: level.trim() || null,
+      details: details.trim() || null,
       teacher_id: teacher_id || null,
       start_date: start_date || null,
       end_date: end_date || null,
-      num_student: num_student || null,
+      num_student: num_student.trim() || null,
       is_active: true,
     };
 
@@ -51,6 +53,8 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  pattern=".*\S.*"
+                  title="Il campo non può essere vuoto"
                 />
               </label>
 
@@ -75,7 +79,9 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
               <label>
                 N° Students:
                 <input
-                  type="text"
+                  type="number"
+                  min="0"
+                  step="1"
                   value={num_student}
                   onChange={(e) => setNumStudent(e.target.value)}
                 />
@@ -95,6 +101,7 @@ export const FormInsertClass = ({ onClose }: FormInsertClassProps) => {
                 <input
                   type="date"
                   value={end_date}
+                  min={start_date || undefined}
                   onChange={(e) => setEndDate(e.target.value)}
                 />
               </label>

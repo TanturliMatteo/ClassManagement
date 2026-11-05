@@ -1,16 +1,18 @@
 import { supabase } from "./supabase";
 import type { LessonWithForeign, Lesson } from "../types";
 
-export const createLesson = async (newLesson: Omit<Lesson, "id">) => {
+export const createLesson = async (
+  newLesson: Omit<Lesson, "id" | "created_at">,
+): Promise<Lesson> => {
   const { data, error } = await supabase
     .from("Lessons")
-    .insert(newLesson as Lesson)
+    .insert(newLesson)
     .select()
     .single();
   if (error) {
     throw new Error(error.message);
   }
-  return data;
+  return data as Lesson;
 };
 
 export const getLessons = async (): Promise<LessonWithForeign[]> => {
@@ -28,7 +30,7 @@ export const getLessons = async (): Promise<LessonWithForeign[]> => {
 
 export const updateLesson = async (
   id: string,
-  updates: Partial<LessonWithForeign>,
+  updates: Partial<Lesson>,
 ) => {
   const { data, error } = await supabase
     .from("Lessons")

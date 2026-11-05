@@ -48,13 +48,13 @@ const FormEditClass = ({
 
   const handleConfirm = () => {
     const dataToUpdate = {
-      name,
-      level,
-      details: details || null,
-      teacher_id,
-      start_date,
-      end_date,
-      num_student: num_student || null,
+      name: name.trim(),
+      level: level.trim() || null,
+      details: details.trim() || null,
+      teacher_id: teacher_id || null,
+      start_date: start_date || null,
+      end_date: end_date || null,
+      num_student: num_student.trim() || null,
       is_active: isActive,
     };
     updateClass(
@@ -73,6 +73,20 @@ const FormEditClass = ({
       },
       { onSuccess: () => onClose() },
     );
+  };
+
+  // Takeover: docente e date sono obbligatori (definiscono il nuovo periodo).
+  // Modifica normale: solo il nome è obbligatorio.
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Secondo controllo, indipendente dalla validazione del browser.
+    if (takeOver) {
+      if (!teacher_id || !start_date || !end_date) return;
+      handleTakeOver();
+    } else {
+      if (!name.trim()) return;
+      handleConfirm();
+    }
   };
 
   if (showDeleteConfirm) {
@@ -118,7 +132,7 @@ const FormEditClass = ({
 
   return (
     <div className="modal-overlay">
-      <div className="modal-box">
+      <form className="modal-box" onSubmit={handleSubmit}>
         <div className="column">
           <div>
             <div className="row">
@@ -129,6 +143,8 @@ const FormEditClass = ({
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
+                  pattern=".*\S.*"
+                  title="Il campo non può essere vuoto"
                   readOnly={!!takeOver}
                   className={takeOver ? "readonly" : ""}
                 />
@@ -140,7 +156,6 @@ const FormEditClass = ({
                   type="text"
                   value={level}
                   onChange={(e) => setLevel(e.target.value)}
-                  required
                   readOnly={!!takeOver}
                   className={takeOver ? "readonly" : ""}
                 />
@@ -160,7 +175,9 @@ const FormEditClass = ({
               <label>
                 N° Students:
                 <input
-                  type="text"
+                  type="number"
+                  min="0"
+                  step="1"
                   value={num_student}
                   onChange={(e) => setNumStudent(e.target.value)}
                   readOnly={!!takeOver}
@@ -174,7 +191,7 @@ const FormEditClass = ({
                   type="date"
                   value={start_date}
                   onChange={(e) => setStartDate(e.target.value)}
-                  required
+                  required={!!takeOver}
                 />
               </label>
 
@@ -183,8 +200,9 @@ const FormEditClass = ({
                 <input
                   type="date"
                   value={end_date}
+                  min={start_date || undefined}
                   onChange={(e) => setEndDate(e.target.value)}
-                  required
+                  required={!!takeOver}
                 />
               </label>
 
@@ -194,9 +212,9 @@ const FormEditClass = ({
                   value={teacher_id}
                   onChange={(e) => setTeacherId(e.target.value)}
                   disabled={isLoadingTeachers}
-                  required
+                  required={!!takeOver}
                 >
-                  <option value="" disabled>
+                  <option value="" disabled={!!takeOver}>
                     Select a teacher
                   </option>
                   {teachersData?.map((t) => (
@@ -237,8 +255,7 @@ const FormEditClass = ({
             )}
 
             <button
-              type="button"
-              onClick={takeOver ? handleTakeOver : handleConfirm}
+              type="submit"
               disabled={isPending || isTakingOver}
               className="min"
             >
@@ -250,7 +267,7 @@ const FormEditClass = ({
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

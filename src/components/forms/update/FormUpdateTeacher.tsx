@@ -21,10 +21,14 @@ const FormUpdateTeacher = ({
   if (!teacherData)
     return <div className="modal-box">{"Teacher not found"}</div>;
 
-  const handleConfirm = () => {
+  const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Secondo controllo, indipendente dalla validazione del browser.
+    if (!name.trim() || !email.trim()) return;
+
     const dataToUpdate = {
-      name: name,
-      email,
+      name: name.trim(),
+      email: email.trim(),
     };
 
     mutate(
@@ -39,7 +43,7 @@ const FormUpdateTeacher = ({
 
   return (
     <div className="modal-overlay">
-      <div className="modal-box ">
+      <form className="modal-box" onSubmit={handleConfirm}>
         <div className="column">
           <div className="row">
             <label>
@@ -49,6 +53,8 @@ const FormUpdateTeacher = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                pattern=".*\S.*"
+                title="Il campo non può essere vuoto"
               />
             </label>
 
@@ -84,15 +90,14 @@ const FormUpdateTeacher = ({
           </button>
 
           <button
-            type="button"
-            onClick={handleConfirm}
+            type="submit"
             disabled={isPending}
             className="min"
           >
             {isPending ? "Salvataggio..." : "Confirm"}
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import type { Teacher } from "../types";
 export const createTeacher = async (newTeacher: Omit<Teacher, "id">) => {
   const { data, error } = await supabase
     .from("Teachers")
-    .insert(newTeacher as Teacher);
+    .insert(newTeacher);
 
   if (error) {
     throw new Error(error.message);

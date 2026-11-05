@@ -17,7 +17,7 @@ export const createClass = async (
 ) => {
   const { data, error } = await supabase
     .from("Classes")
-    .insert(newClass as Class);
+    .insert(newClass);
   if (error) {
     throw new Error(error.message);
   }
@@ -26,7 +26,7 @@ export const createClass = async (
 
 export const updateClass = async (
   id: string,
-  updates: Partial<ClassWithTeacher>,
+  updates: Partial<Class>,
 ) => {
   const { data, error } = await supabase
     .from("Classes")

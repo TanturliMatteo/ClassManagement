@@ -29,19 +29,15 @@ const FormInsertLesson = ({
 
   const handleConfirm = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    const finalDate =
-      date ||
-      new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .slice(0, 16);
+    // Secondo controllo, indipendente dalla validazione del browser.
+    if (!title.trim() || !date || !class_id || !teacher_id) return;
 
     const newLesson = {
-      title,
-      date: finalDate,
+      title: title.trim(),
+      date,
       class_id,
       teacher_id,
-      description: description || null,
+      description: description.trim() || null,
     };
     mutate(newLesson, {
       onSuccess: (createdLesson: Lesson) => {
@@ -68,6 +64,8 @@ const FormInsertLesson = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
+                pattern=".*\S.*"
+                title="Il campo non può essere vuoto"
               />
 
               <input
@@ -81,6 +79,7 @@ const FormInsertLesson = ({
                 value={class_id}
                 onChange={(e) => setClass_id(e.target.value)}
                 disabled={isLoadingClasses}
+                required
               >
                 <option value="" disabled>
                   Select a class
@@ -96,6 +95,7 @@ const FormInsertLesson = ({
                 value={teacher_id}
                 onChange={(e) => setTeacher_id(e.target.value)}
                 disabled={isLoadingTeachers}
+                required
               >
                 <option value="" disabled>
                   Select a teacher

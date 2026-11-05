@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateClass } from "../services/classesServices";
-import type { ClassWithTeacher } from "../types/index";
+import type { Class } from "../types/index";
 
 export const useUpdateClass = () => {
   const queryClient = useQueryClient();
@@ -11,7 +11,7 @@ export const useUpdateClass = () => {
       updates,
     }: {
       id: string;
-      updates: Partial<ClassWithTeacher>;
+      updates: Partial<Class>;
     }) => updateClass(id, updates),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["classes"] });
