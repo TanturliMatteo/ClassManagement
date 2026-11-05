@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useOutletContext } from "react-router";
 import { useGetStudents } from "../hooks/useGetStudents";
 import { useGetTeachers } from "../hooks/useGetTeachers";
 import { useGetClasses } from "../hooks/useGetClasses";
@@ -6,6 +6,7 @@ import { useGetLessons } from "../hooks/useGetLessons";
 import logo from "../assets/logo.png";
 
 const HomePage = () => {
+  const { isAdmin } = useOutletContext<{ isAdmin: boolean }>();
   const { data: students } = useGetStudents();
   const { data: teachers } = useGetTeachers();
   const { data: classes } = useGetClasses();
@@ -48,19 +49,33 @@ const HomePage = () => {
     <div className="dashboard-container">
       <img src={logo} alt="Logo" className="logo" />
       <div className="stats-grid">
-        {stats.map((stat, i) => (
-          <Link
-            key={i}
-            to={stat.path}
-            className="stat-card"
-            style={{ borderTop: `4px solid ${stat.color}` }}
-          >
-            <span className="stat-label">{stat.label}</span>
-            <span className="stat-value" style={{ color: stat.color }}>
-              {stat.value}
-            </span>
-          </Link>
-        ))}
+        {stats.map((stat, i) => {
+          const content = (
+            <>
+              <span className="stat-label">{stat.label}</span>
+              <span className="stat-value" style={{ color: stat.color }}>
+                {stat.value}
+              </span>
+            </>
+          );
+          const style = { borderTop: `4px solid ${stat.color}` };
+
+          // La pagina Teachers è riservata agli admin: per gli altri la
+          // scheda resta visibile (layout a 4) ma non è cliccabile.
+          if (stat.path === "/teachers" && !isAdmin) {
+            return (
+              <div key={i} className="stat-card stat-card--static" style={style}>
+                {content}
+              </div>
+            );
+          }
+
+          return (
+            <Link key={i} to={stat.path} className="stat-card" style={style}>
+              {content}
+            </Link>
+          );
+        })}
       </div>
     </div>
   );

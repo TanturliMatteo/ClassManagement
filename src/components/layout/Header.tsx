@@ -2,7 +2,11 @@ import { useState } from "react";
 import { NavLink } from "react-router";
 import { supabase } from "../../services/supabase";
 
-const Header = () => {
+interface HeaderProps {
+  isAdmin: boolean;
+}
+
+const Header = ({ isAdmin }: HeaderProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -41,9 +45,11 @@ const Header = () => {
         <NavLink to="/lessons" className="nav-link">
           Lessons
         </NavLink>
-        <NavLink to="/teachers" className="nav-link">
-          Teachers
-        </NavLink>
+        {isAdmin && (
+          <NavLink to="/teachers" className="nav-link">
+            Teachers
+          </NavLink>
+        )}
         <div>
           <button type="button" onClick={handleLogout} className="logout-btn">
             Logout

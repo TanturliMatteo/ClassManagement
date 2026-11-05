@@ -397,6 +397,15 @@ a {
     box-shadow 0.3s ease;
 }
 
+.stat-card--static {
+  cursor: default;
+}
+
+.stat-card--static:hover {
+  transform: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 .stat-label {
   font-size: 1rem;
   color: #b3b3b3;

@@ -46,7 +46,7 @@ function RootLayout() {
           <LoginPage />
         ) : (
           <>
-            <Header />
+            <Header isAdmin={isAdmin} />
             <main className="mainLayout">
               <Outlet context={{ user, isAdmin }} />
             </main>
