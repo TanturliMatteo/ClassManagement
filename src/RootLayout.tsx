@@ -37,7 +37,7 @@ function RootLayout() {
     );
   }
 
-  const isAdmin = user?.user_metadata?.is_admin === true;
+  const isAdmin = user?.app_metadata?.is_admin === true;
 
   return (
     <QueryClientProvider client={queryClient}>
