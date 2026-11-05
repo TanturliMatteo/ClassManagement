@@ -4,11 +4,16 @@ import { useUpdateLesson } from "../../../hooks/useUpdateLessons";
 import { useGetClasses } from "../../../hooks/useGetClasses";
 import { useDeleteLesson } from "../../../hooks/useDeleteLesson";
 import { useGetTeachers } from "../../../hooks/useGetTeachers";
+import { useGetLessonAttendances } from "../../../hooks/useGetLessonAttendances";
 
 interface FormEditLessonProps {
   lessonData: Lesson;
   onClose: () => void;
-  onLessonUpdated?: (classId: string, lessonId: string) => void;
+  onLessonUpdated?: (
+    classId: string,
+    lessonId: string,
+    lessonDate: string,
+  ) => void;
 }
 
 const formatDateForInput = (isoString: string | null | undefined): string => {
@@ -43,13 +48,26 @@ const FormEditLesson = ({
   const { data: teachers, isLoading: isLoadingTeachers } = useGetTeachers();
   const { mutate: deleteLesson, isPending: isDeleting } = useDeleteLesson();
   const { mutate, isPending } = useUpdateLesson();
+  const { data: lessonAttendances } = useGetLessonAttendances(
+    lessonData?.id ?? "",
+  );
 
-  const activeClasses = (classes || []).filter((cls) => cls.is_active);
+  // Se l'appello è già stato fatto la classe non si può cambiare: le presenze
+  // salvate appartengono agli studenti della classe originale.
+  const hasAttendance = (lessonAttendances || []).length > 0;
+
+  // Classi attive + quella attuale della lezione (anche se disattivata),
+  // così il menu mostra sempre il valore corrente.
+  const activeClasses = (classes || []).filter(
+    (cls) => cls.is_active || cls.id === lessonData?.class_id,
+  );
 
   if (!lessonData) return <div className="modal-box">{"Lesson not found"}</div>;
 
   const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (hasAttendance && class_id !== lessonData.class_id) return;
+
     const dataToUpdate = {
       title,
       date,
@@ -63,7 +81,7 @@ const FormEditLesson = ({
       {
         onSuccess: () => {
           if (class_id && lessonData?.id)
-            onLessonUpdated?.(class_id, lessonData.id);
+            onLessonUpdated?.(class_id, lessonData.id, date);
           onClose();
         },
       },
@@ -135,7 +153,7 @@ const FormEditLesson = ({
               <select
                 value={class_id}
                 onChange={(e) => setClass_id(e.target.value)}
-                disabled={isLoadingClasses}
+                disabled={isLoadingClasses || hasAttendance}
                 required
               >
                 <option value="" disabled>
@@ -164,6 +182,13 @@ const FormEditLesson = ({
                 ))}
               </select>
             </div>
+
+            {hasAttendance && (
+              <p style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+                La classe non può essere cambiata perché l'appello di questa
+                lezione è già stato fatto.
+              </p>
+            )}
 
             <textarea
               value={description}

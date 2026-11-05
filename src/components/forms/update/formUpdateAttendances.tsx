@@ -3,10 +3,12 @@ import { useGetStudents } from "../../../hooks/useGetStudents";
 import { useGetLessonAttendances } from "../../../hooks/useGetLessonAttendances";
 import { useUpdateAttendance } from "../../../hooks/useUpdateAttendance";
 import type { Attendances } from "../../../types/index";
+import isStudentActiveOn from "../../../utils/isStudentActiveOn";
 
 interface FormUpdateAttendancesProps {
   classId: string;
   lessonId: string;
+  lessonDate: string;
   onClose: () => void;
   readOnly: boolean;
 }
@@ -14,6 +16,7 @@ interface FormUpdateAttendancesProps {
 const FormUpdateAttendances = ({
   classId,
   lessonId,
+  lessonDate,
   onClose,
   readOnly,
 }: FormUpdateAttendancesProps) => {
@@ -32,9 +35,27 @@ const FormUpdateAttendances = ({
 
   const isLoading = isLoadingStudents || isLoadingAttendances;
 
-  const filteredStudents = (students || []).filter(
-    (student) => student.class_id === classId,
-  );
+  const isAttendanceAlreadyTaken = (existingAttendances || []).length > 0;
+
+  // Appello già fatto: la lista è quella salvata quel giorno (storico reale),
+  // indipendente dalla classe in cui lo studente si trova oggi.
+  // Prima compilazione: studenti della classe iscritti alla data della lezione.
+  const studentsById = new Map((students || []).map((s) => [s.id, s]));
+  const filteredStudents = (
+    isAttendanceAlreadyTaken
+      ? (existingAttendances || []).map((att) => ({
+          id: att.student_id,
+          name:
+            studentsById.get(att.student_id)?.name ?? "Studente non trovato",
+        }))
+      : (students || [])
+          .filter(
+            (student) =>
+              student.class_id === classId &&
+              isStudentActiveOn(student, lessonDate),
+          )
+          .map((student) => ({ id: student.id, name: student.name }))
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
   const dbAttendanceMap = (existingAttendances || []).reduce<
     Record<string, boolean>
@@ -45,7 +66,6 @@ const FormUpdateAttendances = ({
     return acc;
   }, {});
 
-  const isAttendanceAlreadyTaken = (existingAttendances || []).length > 0;
   const defaultFallback = isAttendanceAlreadyTaken ? false : true;
 
   const handleSubmit = () => {

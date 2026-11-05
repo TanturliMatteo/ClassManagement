@@ -18,10 +18,12 @@ export default function LessonsPage() {
   const [activeAttendanceContext, setActiveAttendanceContext] = useState<{
     classId: string;
     lessonId: string;
+    lessonDate: string;
   } | null>(null);
   const [updateAttendanceMap, setUpdateAttendanceMap] = useState<{
     classId: string;
     lessonId: string;
+    lessonDate: string;
     readOnly: boolean;
   } | null>(null);
 
@@ -58,6 +60,7 @@ export default function LessonsPage() {
           setUpdateAttendanceMap({
             classId: lesson.class_id ?? "",
             lessonId: lesson.id,
+            lessonDate: lesson.date,
             readOnly: true,
           });
         }}
@@ -73,8 +76,8 @@ export default function LessonsPage() {
       {isAddingLesson && (
         <FormInsertLesson
           onClose={() => setIsAddingLesson(false)}
-          onLessonCreated={(classId, lessonId) => {
-            setActiveAttendanceContext({ classId, lessonId });
+          onLessonCreated={(classId, lessonId, lessonDate) => {
+            setActiveAttendanceContext({ classId, lessonId, lessonDate });
           }}
         />
       )}
@@ -83,6 +86,7 @@ export default function LessonsPage() {
         <FormInsertAttendances
           classId={activeAttendanceContext.classId}
           lessonId={activeAttendanceContext.lessonId}
+          lessonDate={activeAttendanceContext.lessonDate}
           onClose={() => setActiveAttendanceContext(null)}
         />
       )}
@@ -91,10 +95,11 @@ export default function LessonsPage() {
         <FormEditLesson
           lessonData={selectedLesson}
           onClose={() => setSelectedLesson(null)}
-          onLessonUpdated={(classId, lessonId) => {
+          onLessonUpdated={(classId, lessonId, lessonDate) => {
             setUpdateAttendanceMap({
               classId,
               lessonId,
+              lessonDate,
               readOnly: false,
             });
           }}
@@ -105,6 +110,7 @@ export default function LessonsPage() {
         <FormUpdateAttendances
           classId={updateAttendanceMap.classId}
           lessonId={updateAttendanceMap.lessonId}
+          lessonDate={updateAttendanceMap.lessonDate}
           readOnly={updateAttendanceMap.readOnly}
           onClose={() => setUpdateAttendanceMap(null)}
         />

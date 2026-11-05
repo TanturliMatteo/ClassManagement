@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useGetStudents } from "../../../hooks/useGetStudents";
 import { useUpdateAttendance } from "../../../hooks/useUpdateAttendance";
+import isStudentActiveOn from "../../../utils/isStudentActiveOn";
 
 interface FormInsertAttendancesProps {
   classId: string;
   lessonId: string;
+  lessonDate: string;
   onClose: () => void;
 }
 
 const FormInsertAttendances = ({
   classId,
   lessonId,
+  lessonDate,
   onClose,
 }: FormInsertAttendancesProps) => {
   const [attendanceMap, setAttendanceMap] = useState<Record<string, boolean>>(
@@ -24,8 +27,10 @@ const FormInsertAttendances = ({
     error: saveError,
   } = useUpdateAttendance();
 
+  // Studenti della classe che risultavano iscritti nel giorno della lezione.
   const filteredStudents = (students || []).filter(
-    (student) => student.class_id === classId,
+    (student) =>
+      student.class_id === classId && isStudentActiveOn(student, lessonDate),
   );
 
   const handleSubmit = () => {

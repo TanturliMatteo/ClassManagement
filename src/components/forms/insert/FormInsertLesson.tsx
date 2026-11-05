@@ -6,7 +6,11 @@ import type { Lesson } from "../../../types";
 
 interface FormInsertLessonProps {
   onClose: () => void;
-  onLessonCreated: (classId: string, lessonId: string) => void;
+  onLessonCreated: (
+    classId: string,
+    lessonId: string,
+    lessonDate: string,
+  ) => void;
 }
 
 const FormInsertLesson = ({
@@ -42,7 +46,7 @@ const FormInsertLesson = ({
     mutate(newLesson, {
       onSuccess: (createdLesson: Lesson) => {
         if (class_id && createdLesson?.id) {
-          onLessonCreated(class_id, createdLesson.id);
+          onLessonCreated(class_id, createdLesson.id, createdLesson.date);
         }
 
         onClose();
