@@ -2,6 +2,7 @@ import type { Teacher } from "../../../types/index";
 import { useState } from "react";
 import { useUpdateTeacher } from "../../../hooks/useUpdateTeacher";
 import { useDeleteTeacher } from "../../../hooks/useDeleteTeacher";
+import ConfirmDeleteModal from "../../ui/ConfirmDeleteModal";
 
 interface FormUpdateTeacherProps {
   teacherData: Teacher;
@@ -15,11 +16,36 @@ const FormUpdateTeacher = ({
   const [name, setName] = useState<string>(teacherData.name || "");
   const [email, setEmail] = useState<string>(teacherData.email || "");
 
-  const { mutate: deleteTeacher, isPending: isDeleting } = useDeleteTeacher();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const {
+    mutate: deleteTeacher,
+    isPending: isDeleting,
+    error: deleteError,
+    reset: resetDelete,
+  } = useDeleteTeacher();
   const { mutate, isPending } = useUpdateTeacher();
 
   if (!teacherData)
     return <div className="modal-box">{"Teacher not found"}</div>;
+
+  if (showDeleteConfirm) {
+    return (
+      <ConfirmDeleteModal
+        entity="teacher"
+        id={teacherData.id}
+        title="Eliminare questo docente?"
+        itemName={teacherData.name}
+        isDeleting={isDeleting}
+        error={deleteError}
+        onCancel={() => {
+          resetDelete();
+          setShowDeleteConfirm(false);
+        }}
+        onConfirm={() => deleteTeacher(teacherData.id, { onSuccess: onClose })}
+      />
+    );
+  }
 
   const handleConfirm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,16 +103,10 @@ const FormUpdateTeacher = ({
 
           <button
             type="button"
-            onClick={() => {
-              if (teacherData) {
-                deleteTeacher(teacherData.id);
-              }
-              onClose();
-            }}
-            disabled={isDeleting}
+            onClick={() => setShowDeleteConfirm(true)}
             className="delete-btn min"
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            Delete
           </button>
 
           <button

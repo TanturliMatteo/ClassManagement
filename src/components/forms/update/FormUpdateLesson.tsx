@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useUpdateLesson } from "../../../hooks/useUpdateLessons";
 import { useGetClasses } from "../../../hooks/useGetClasses";
 import { useDeleteLesson } from "../../../hooks/useDeleteLesson";
+import ConfirmDeleteModal from "../../ui/ConfirmDeleteModal";
 import { useGetTeachers } from "../../../hooks/useGetTeachers";
 import { useGetLessonAttendances } from "../../../hooks/useGetLessonAttendances";
 
@@ -41,12 +42,16 @@ const FormEditLesson = ({
     lessonData?.teacher_id || "",
   );
 
-  // 🌟 Stato per la conferma eliminazione
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
   const { data: teachers, isLoading: isLoadingTeachers } = useGetTeachers();
-  const { mutate: deleteLesson, isPending: isDeleting } = useDeleteLesson();
+  const {
+    mutate: deleteLesson,
+    isPending: isDeleting,
+    error: deleteError,
+    reset: resetDelete,
+  } = useDeleteLesson();
   const { mutate, isPending } = useUpdateLesson();
   const { data: lessonAttendances } = useGetLessonAttendances(
     lessonData?.id ?? "",
@@ -92,42 +97,19 @@ const FormEditLesson = ({
 
   if (showDeleteConfirm) {
     return (
-      <div className="modal-overlay">
-        <div className="modal-box">
-          <div
-            className="column"
-            style={{
-              textAlign: "center",
-              marginBottom: "2rem",
-              marginTop: "1rem",
-              fontSize: "1.5rem",
-            }}
-          >
-            Sei sicuro? L'eliminazione della lezione comporta la rimozione di
-            tutti i dati associati.
-          </div>
-          <div className="row">
-            <button
-              type="button"
-              onClick={() => setShowDeleteConfirm(false)}
-              className="cancel-btn min"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (lessonData) deleteLesson(lessonData.id);
-                onClose();
-              }}
-              disabled={isDeleting}
-              className="delete-btn min"
-            >
-              {isDeleting ? "Deleting..." : "Confirm"}
-            </button>
-          </div>
-        </div>
-      </div>
+      <ConfirmDeleteModal
+        entity="lesson"
+        id={lessonData.id}
+        title="Eliminare questa lezione?"
+        itemName={lessonData.title}
+        isDeleting={isDeleting}
+        error={deleteError}
+        onCancel={() => {
+          resetDelete();
+          setShowDeleteConfirm(false);
+        }}
+        onConfirm={() => deleteLesson(lessonData.id, { onSuccess: onClose })}
+      />
     );
   }
 

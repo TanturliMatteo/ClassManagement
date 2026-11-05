@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useUpdateStudent } from "../../../hooks/useUpdateStudent";
 import { useGetClasses } from "../../../hooks/useGetClasses";
 import { useDeleteStudent } from "../../../hooks/useDeleteStudent";
+import ConfirmDeleteModal from "../../ui/ConfirmDeleteModal";
 
 interface FormEditStudentProps {
   studentData: StudentWithForeign;
@@ -25,7 +26,12 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { data: classes, isLoading: isLoadingClasses } = useGetClasses();
-  const { mutate: deleteStudent, isPending: isDeleting } = useDeleteStudent();
+  const {
+    mutate: deleteStudent,
+    isPending: isDeleting,
+    error: deleteError,
+    reset: resetDelete,
+  } = useDeleteStudent();
   const { mutate, isPending } = useUpdateStudent();
 
   type SingleClass = NonNullable<typeof classes>[number];
@@ -64,42 +70,19 @@ const FormEditStudent = ({ studentData, onClose }: FormEditStudentProps) => {
 
   if (showDeleteConfirm) {
     return (
-      <div className="modal-overlay">
-        <div className="modal-box">
-          <div
-            className="column"
-            style={{
-              textAlign: "center",
-              marginBottom: "2rem",
-              marginTop: "1rem",
-              fontSize: "1.5rem",
-            }}
-          >
-            Sei sicuro? L'eliminazione dello studente comporta la rimozione di
-            tutti i dati associati.
-          </div>
-          <div className="row">
-            <button
-              type="button"
-              onClick={() => setShowDeleteConfirm(false)}
-              className="cancel-btn min"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (studentData) deleteStudent(studentData.id);
-                onClose();
-              }}
-              disabled={isDeleting}
-              className="delete-btn min"
-            >
-              {isDeleting ? "Deleting..." : "Confirm"}
-            </button>
-          </div>
-        </div>
-      </div>
+      <ConfirmDeleteModal
+        entity="student"
+        id={studentData.id}
+        title="Eliminare questo studente?"
+        itemName={studentData.name}
+        isDeleting={isDeleting}
+        error={deleteError}
+        onCancel={() => {
+          resetDelete();
+          setShowDeleteConfirm(false);
+        }}
+        onConfirm={() => deleteStudent(studentData.id, { onSuccess: onClose })}
+      />
     );
   }
 

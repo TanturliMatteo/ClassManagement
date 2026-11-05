@@ -8,6 +8,9 @@ export const useDeleteClass = () => {
     mutationFn: (id: string) => deleteClass(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["classes"] });
+      queryClient.invalidateQueries({ queryKey: ["students"] });
+      queryClient.invalidateQueries({ queryKey: ["lessons"] });
+      queryClient.invalidateQueries({ queryKey: ["attendances"] });
     },
   });
 };

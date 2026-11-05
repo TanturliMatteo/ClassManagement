@@ -42,7 +42,18 @@ export const updateLesson = async (
 };
 
 export const deleteLesson = async (id: string) => {
-  const { data, error } = await supabase.from("Lessons").delete().eq("id", id);
+  // .select() restituisce le righe eliminate: se è vuoto non è stato cancellato
+  // nulla (record già rimosso o permessi RLS insufficienti).
+  const { data, error } = await supabase
+    .from("Lessons")
+    .delete()
+    .eq("id", id)
+    .select("id");
   if (error) throw new Error(error.message);
+  if (!data || data.length === 0) {
+    throw new Error(
+      "nessun record eliminato (già rimosso o permessi insufficienti).",
+    );
+  }
   return data;
 };

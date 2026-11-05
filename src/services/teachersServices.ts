@@ -36,7 +36,18 @@ export const updateTeacher = async (id: string, updates: Partial<Teacher>) => {
 };
 
 export const deleteTeacher = async (id: string) => {
-  const { data, error } = await supabase.from("Teachers").delete().eq("id", id);
+  // .select() restituisce le righe eliminate: se è vuoto non è stato cancellato
+  // nulla (record già rimosso o permessi RLS insufficienti).
+  const { data, error } = await supabase
+    .from("Teachers")
+    .delete()
+    .eq("id", id)
+    .select("id");
   if (error) throw new Error(error.message);
+  if (!data || data.length === 0) {
+    throw new Error(
+      "nessun record eliminato (già rimosso o permessi insufficienti).",
+    );
+  }
   return data;
 };

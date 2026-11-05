@@ -303,6 +303,79 @@ a {
   flex-direction: column;
 }
 
+/* Conferma di eliminazione: stesso stile dei form (riquadro, bordi, pulsanti) */
+.modal-box.confirm-box {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 32rem;
+  text-align: center;
+}
+
+.confirm-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.confirm-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.confirm-title {
+  font-size: 1.4rem;
+}
+
+.confirm-item {
+  font-weight: bold;
+  font-size: 1.15rem;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.confirm-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.confirm-list {
+  padding-left: 1.25rem;
+  text-align: left;
+}
+
+.confirm-list li {
+  margin: 0.25rem 0;
+}
+
+.confirm-muted {
+  font-size: 0.95rem;
+  opacity: 0.75;
+}
+
+.confirm-blocked {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background-color: rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 160, 0, 0.6);
+}
+
+.confirm-error {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.confirm-actions {
+  margin-bottom: 0;
+}
+
 .modal-box.description-box {
   flex-direction: column;
   max-width: 100%;

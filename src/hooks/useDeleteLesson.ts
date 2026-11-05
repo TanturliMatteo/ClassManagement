@@ -8,6 +8,7 @@ export const useDeleteLesson = () => {
     mutationFn: (id: string) => deleteLesson(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["lessons"] });
+      queryClient.invalidateQueries({ queryKey: ["attendances"] });
     },
   });
 };
