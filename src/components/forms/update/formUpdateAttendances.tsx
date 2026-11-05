@@ -24,7 +24,11 @@ const FormUpdateAttendances = ({
   const { data: students, isLoading: isLoadingStudents } = useGetStudents();
   const { data: existingAttendances, isLoading: isLoadingAttendances } =
     useGetLessonAttendances(lessonId);
-  const { mutate: updateAttendance } = useUpdateAttendance();
+  const {
+    mutate: updateAttendance,
+    isPending: isSaving,
+    error: saveError,
+  } = useUpdateAttendance();
 
   const isLoading = isLoadingStudents || isLoadingAttendances;
 
@@ -63,8 +67,8 @@ const FormUpdateAttendances = ({
       };
     });
 
-    updateAttendance(attendancesPayload);
-    onClose();
+    // Il modale si chiude solo se il salvataggio è andato a buon fine.
+    updateAttendance(attendancesPayload, { onSuccess: onClose });
   };
 
   return (
@@ -132,6 +136,12 @@ const FormUpdateAttendances = ({
           </table>
         )}
 
+        {saveError && (
+          <p style={{ color: "#ff4d4d", fontWeight: "bold", textAlign: "center" }}>
+            Salvataggio non riuscito: {saveError.message}
+          </p>
+        )}
+
         <div
           style={{
             display: "flex",
@@ -154,10 +164,10 @@ const FormUpdateAttendances = ({
             <button
               type="button"
               onClick={handleSubmit}
-              disabled={isLoading || filteredStudents.length === 0}
+              disabled={isLoading || isSaving || filteredStudents.length === 0}
               style={{ flex: 1, margin: 0 }}
             >
-              Update Attendances
+              {isSaving ? "Saving..." : "Update Attendances"}
             </button>
           )}
         </div>

@@ -9,16 +9,6 @@ export const getAttendances = async (): Promise<Attendances[]> => {
   return data as Attendances[];
 };
 
-export const createAttendance = async (newAttendance: Attendances) => {
-  const { data, error } = await supabase
-    .from("Attendances")
-    .insert(newAttendance as Attendances);
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data;
-};
-
 export const getAttendancesByLesson = async (
   lessonId: string,
 ): Promise<Attendances[]> => {

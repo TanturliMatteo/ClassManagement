@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useGetStudents } from "../../../hooks/useGetStudents";
-import { useInsertAttendance } from "../../../hooks/useInsertAttendance";
+import { useUpdateAttendance } from "../../../hooks/useUpdateAttendance";
 
 interface FormInsertAttendancesProps {
   classId: string;
@@ -18,7 +18,11 @@ const FormInsertAttendances = ({
   );
 
   const { data: students, isLoading } = useGetStudents();
-  const { mutate: insertAttendance } = useInsertAttendance();
+  const {
+    mutate: saveAttendances,
+    isPending: isSaving,
+    error: saveError,
+  } = useUpdateAttendance();
 
   const filteredStudents = (students || []).filter(
     (student) => student.class_id === classId,
@@ -30,16 +34,15 @@ const FormInsertAttendances = ({
       return;
     }
 
-    filteredStudents.forEach((student) => {
-      const isPresent = attendanceMap[student.id] ?? true;
+    // Una sola richiesta per tutto l'appello: o si salva tutto o niente.
+    const attendancesPayload = filteredStudents.map((student) => ({
+      lesson_id: lessonId,
+      student_id: student.id,
+      is_present: attendanceMap[student.id] ?? true,
+    }));
 
-      insertAttendance({
-        lesson_id: lessonId,
-        student_id: student.id,
-        is_present: isPresent,
-      });
-    });
-    onClose();
+    // Il modale si chiude solo se il salvataggio è andato a buon fine.
+    saveAttendances(attendancesPayload, { onSuccess: onClose });
   };
 
   return (
@@ -95,6 +98,12 @@ const FormInsertAttendances = ({
           </table>
         )}
 
+        {saveError && (
+          <p style={{ color: "#ff4d4d", fontWeight: "bold", textAlign: "center" }}>
+            Salvataggio non riuscito: {saveError.message}
+          </p>
+        )}
+
         <div
           style={{
             display: "flex",
@@ -110,9 +119,9 @@ const FormInsertAttendances = ({
           <button
             type="button"
             onClick={handleSubmit}
-            disabled={isLoading || filteredStudents.length === 0}
+            disabled={isLoading || isSaving || filteredStudents.length === 0}
           >
-            Save Attendances
+            {isSaving ? "Saving..." : "Save Attendances"}
           </button>
         </div>
       </div>
